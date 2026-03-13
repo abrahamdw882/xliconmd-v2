@@ -5,7 +5,7 @@ module.exports = {
 
     async execute(sock, m) {
         if (!m.isGroup) {
-            return await sock.sendMessage(m.from, { text: 'This command can only be used in groups!' });
+            return await sock.sendMessage(m.from, { text: 'ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ᴏɴʟʏ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs!' });
         }
 
         const owners = ['25770239992037', '233533763772'];
@@ -18,7 +18,7 @@ module.exports = {
                 .map(p => p.id.split('@')[0]);
 
             if (!adminIds.includes(senderId)) {
-                return await sock.sendMessage(m.from, { text: 'Only group admins or owners can use this command!' });
+                return await sock.sendMessage(m.from, { text: 'ᴏɴʟʏ ɢʀᴏᴜᴘ ᴀᴅᴍɪɴs ᴏʀ ᴏᴡɴᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ!' });
             }
         }
 
@@ -26,7 +26,10 @@ module.exports = {
         const participants = groupMetadata.participants.map(p => p.id);
         const mentionText = participants.map(p => `@${p.split('@')[0]}`).join('\n');
 
-        const message = `👋 Hello everyone!\nHere are the group members:\n\n${mentionText}`;
+        const message = `👋 ʜᴇʟʟᴏ ᴇᴠᴇʀʏᴏɴᴇ!
+ʜᴇʀᴇ ᴀʀᴇ ᴛʜᴇ ɢʀᴏᴜᴘ ᴍᴇᴍʙᴇʀs:
+
+${mentionText}`;
 
         await sock.sendMessage(m.from, {
             text: message,
