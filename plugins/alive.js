@@ -8,7 +8,7 @@ module.exports = {
     async execute(sock, m) {
         try {
             const name = m.pushName || m.sender.split('@')[0];
-            const audioUrl = 'https://files.catbox.moe/ocfcla.mp3';
+            const audioUrl = 'https://files.catbox.moe/tcz5xk.mp3';
             const thumbnail = 'https://files.catbox.moe/uz899q.jpg';
             const quoted = {
                 key: {
