@@ -15,3 +15,8 @@ simply install dependencies
 2. node index.js - to start bot
 3. then u check ports it will give u a url some pc as soon as u use node index.js it will open local host
 containing a web view that u will use to pair or scan and link to bot so i guess thats all i guess
+
+
+
+SESSION URL <a href="https://xlicon-sessionid.koyeb.app/">https://xlicon-sessionid.koyeb.app </a>
+after gaining ur session id u will have to either put in config.js SESSION_ID   or create an env SESSION_ID
