@@ -1,3 +1,6 @@
+
+<img src="https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg"> </img>
+
 # XLICONv2 MD 
 
 Just a fun little bot I remade for WhatsApp
