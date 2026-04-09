@@ -50,7 +50,7 @@ XLIOCN *ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ*
 > 「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」
         `.trim();
 
-        const imgUrl = 'https://files.catbox.moe/uz899q.jpg';
+        const imgUrl = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg';
         const author = 'XLICON V2';
         const botname = 'XLICON ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';
         const sourceUrl = 'https://abztech.my.id/';
