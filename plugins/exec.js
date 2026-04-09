@@ -29,7 +29,7 @@ module.exports = {
     const code = m.text.slice(1).trim();
 
     const info = '*ABZTech Exec*';
-    const imgUrl = 'https://i.ibb.co/65fwTVG/carbon-3.png';
+    const imgUrl = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg';
     const author = 'XLIOCN V2';
     const botname = 'XLIOCN  ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';
     const sourceUrl = 'https://abztech.xyz/';
