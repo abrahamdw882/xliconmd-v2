@@ -1,3 +1,4 @@
+require('./config')
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const fs = require('fs');
@@ -13,7 +14,6 @@ global.generateWAMessageFromContent = generateWAMessageFromContent;
 global.generateMessageID = generateMessageID;
 global.prepareWAMessageMedia = prepareWAMessageMedia;
 global.proto = proto;
-require('./config')
 
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
