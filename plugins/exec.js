@@ -1,96 +1,97 @@
-const util = require('util');
-const axios = require('axios');
+const util = require('util')
+const axios = require('axios')
 
-let sentOnce = new Set();
+let sentOnce = new Set()
 
 module.exports = {
-  name: 'exec',
-  aliases: ['$'],
-  description: 'Execute JavaScript code (Owner only)',
+    name: 'exec',
+    aliases: ['$'],
+    description: 'Execute JavaScript code (Owner only)',
 
-  async execute() {},
+    async execute() {},
 
-  async onMessage(sock, m) {
-    if (!m.text) return;
-    if (!m.text.startsWith('$')) return;
-    if (sentOnce.has(m.id)) return;
-    sentOnce.add(m.id);
+    async onMessage(sock, m) {
+        if (!m?.text) return
+        if (!m.text.startsWith('$')) return
+        if (sentOnce.has(m.id)) return
+        sentOnce.add(m.id)
 
-    const owners = global.owners || [];
+        try {
+            if (!m.isOwner) return
 
-    const normalize = (jid) => jid?.split(':')[0];
+            const code = m.text.slice(1).trim()
+            if (!code) {
+                await m.reply('❌ Provide JavaScript code.')
+                return
+            }
 
-    const isOwner =
-      owners.map(normalize).includes(normalize(m.sender)) ||
-      normalize(m.sender) === normalize(sock.user.id);
+            const info = '*ABZTech Exec*'
+            const imgUrl = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg'
+            const author = 'XLIOCN V2'
+            const botname = 'XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ'
+            const sourceUrl = 'https://abztech.xyz/'
 
-    if (!isOwner) return;
+            const sandbox = {
+                sock,
+                m,
+                axios,
+                util,
+                console,
+                proto: global.proto,
+                prepareWAMessageMedia: global.prepareWAMessageMedia,
+                generateWAMessageContent: global.generateWAMessageContent,
+                generateWAMessageFromContent: global.generateWAMessageFromContent,
+                generateMessageID: global.generateMessageID
+            }
 
-    const code = m.text.slice(1).trim();
+            const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
 
-    const info = '*ABZTech Exec*';
-    const imgUrl = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg';
-    const author = 'XLIOCN V2';
-    const botname = 'XLIOCN  ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';
-    const sourceUrl = 'https://abztech.xyz/';
+            let result
+            if (code.includes('await') || code.includes('\n')) {
+                result = await new AsyncFunction(...Object.keys(sandbox), code)(
+                    ...Object.values(sandbox)
+                )
+            } else {
+                result = await new Function(
+                    ...Object.keys(sandbox),
+                    `return (${code})`
+                )(...Object.values(sandbox))
+            }
 
-    try {
-      const sandbox = {
-        sock,
-        m,
-        axios,
-        util,
-        console,
-        proto,
-        prepareWAMessageMedia,
-        generateWAMessageFromContent: global.generateWAMessageFromContent
-      };
+            const output =
+                result === undefined
+                    ? 'undefined'
+                    : typeof result === 'string'
+                    ? result
+                    : util.inspect(result, { depth: 2 })
 
-      const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+            const text = `☑️ Result:\n\`\`\`\n${output.slice(0, 4000)}\n\`\`\``
 
-      let result;
-      if (code.includes('await') || code.includes('\n')) {
-        result = await new AsyncFunction(...Object.keys(sandbox), code)(
-          ...Object.values(sandbox)
-        );
-      } else {
-        result = await new Function(
-          ...Object.keys(sandbox),
-          `return ${code}`
-        )(...Object.values(sandbox));
-      }
+            let thumbnailBuffer = null
+            try {
+                thumbnailBuffer = (
+                    await axios.get(imgUrl, { responseType: 'arraybuffer' })
+                ).data
+            } catch {}
 
-      const output =
-        result === undefined
-          ? 'undefined'
-          : typeof result === 'string'
-          ? result
-          : util.inspect(result, { depth: 1 });
-
-      const text = `☑️ Result:\n\`\`\`\n${output.slice(0, 4000)}\n\`\`\``;
-
-      const thumbnailBuffer = (
-        await axios.get(imgUrl, { responseType: 'arraybuffer' })
-      ).data;
-
-      await m.send(`${info}\n${text}`, {
-        contextInfo: {
-          forwardingScore: 999,
-          isForwarded: true,
-          externalAdReply: {
-            title: author,
-            body: botname,
-            thumbnail: thumbnailBuffer,
-            mediaType: 1,
-            renderLargerThumbnail: true,
-            sourceUrl
-          }
+            await m.send(`${info}\n${text}`, {
+                contextInfo: {
+                    forwardingScore: 999,
+                    isForwarded: true,
+                    externalAdReply: {
+                        title: author,
+                        body: botname,
+                        thumbnail: thumbnailBuffer || undefined,
+                        mediaType: 1,
+                        renderLargerThumbnail: true,
+                        sourceUrl
+                    }
+                }
+            })
+        } catch (err) {
+            await m.send(`❌ Error:\n\`\`\`\n${err.stack || err.message}\n\`\`\``)
+        } finally {
+            setTimeout(() => sentOnce.delete(m.id), 5000)
         }
-      });
-    } catch (err) {
-      await m.send(`❌ Error:\n\`\`\`\n${err.message}\n\`\`\``);
     }
-
-    setTimeout(() => sentOnce.delete(m.id), 5000);
-  }
-};
+}
