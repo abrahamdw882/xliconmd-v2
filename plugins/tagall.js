@@ -29,9 +29,9 @@ module.exports = {
 
 ${mentionText}`
 
-        await sock.sendMessage(m.from, {
+        await m.send({
             text: message,
             mentions: participants
-        }, { quoted: m })
+        })
     }
 }
