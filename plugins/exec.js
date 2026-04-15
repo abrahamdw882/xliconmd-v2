@@ -60,12 +60,12 @@ module.exports = {
 
             const output =
                 result === undefined
-                    ? 'undefined'
+                    ? 'ᴜɴᴅᴇғɪɴᴇᴅ'
                     : typeof result === 'string'
                     ? result
                     : util.inspect(result, { depth: 2 })
 
-            const text = `☑️ Result:\n\`\`\`\n${output.slice(0, 4000)}\n\`\`\``
+            const text = `☑️ ʀᴇsᴜʟᴛ:\n\`\`\`\n${JSON.stringify([output], null, 2).slice(0, 4000)}\n\`\`\``
 
             let thumbnailBuffer = null
             try {
