@@ -21,7 +21,7 @@ module.exports = {
 
             const code = m.text.slice(1).trim()
             if (!code) {
-                await m.reply('❌ Provide JavaScript code.')
+                await m.reply('ʏᴀ ᴡʜᴇʀᴇ ɪꜱ ᴄᴏᴅᴇ.')
                 return
             }
 
