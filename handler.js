@@ -4,6 +4,10 @@ function normalizeJid(jid = '') {
     return String(jid).split(':')[0]
 }
 
+function getNumberFromJid(jid = '') {
+    return normalizeJid(jid).split('@')[0]
+}
+
 function checkOwner(sender = '', sockUser = {}) {
     const owners = Array.isArray(global.owners)
         ? global.owners.map(normalizeJid)
@@ -25,7 +29,8 @@ async function serializeMessage(sock, msg) {
     const sender = msg.key?.fromMe
         ? (sock.user?.id || sock.user?.lid || '')
         : (isGroup ? msg.key?.participant : from)
-    const pushName = msg.pushName || (sender ? sender.split('@')[0] : 'Unknown')
+
+    const pushName = msg.pushName || (sender ? getNumberFromJid(sender) : 'Unknown')
 
     let body = ''
     const type = Object.keys(msg.message || {})[0] || ''
@@ -69,6 +74,38 @@ async function serializeMessage(sock, msg) {
         ? await sock.groupMetadata(from).catch(() => null)
         : null
 
+    const groupParticipants = Array.isArray(groupMetadata?.participants)
+        ? groupMetadata.participants
+        : []
+
+    const senderNormalized = normalizeJid(sender)
+    const botNormalized = normalizeJid(sock.user?.id || sock.user?.lid || '')
+    const senderNumber = getNumberFromJid(sender)
+
+    const participantData = groupParticipants.find(p => {
+        const pid = normalizeJid(p?.id || p?.jid || '')
+        return pid === senderNormalized
+    })
+
+    const botData = groupParticipants.find(p => {
+        const pid = normalizeJid(p?.id || p?.jid || '')
+        return pid === botNormalized
+    })
+
+    const groupOwnerId = normalizeJid(
+        groupMetadata?.owner ||
+        groupMetadata?.subjectOwner ||
+        ''
+    )
+
+    const isOwner = checkOwner(sender, sock.user)
+    const isAdmin = isGroup ? !!participantData?.admin : false
+    const isBotAdmin = isGroup ? !!botData?.admin : false
+    const isGroupOwner = isGroup
+        ? senderNormalized === groupOwnerId ||
+          normalizeJid(participantData?.id || participantData?.jid || '') === groupOwnerId
+        : false
+
     let quoted
     const ctxInfo =
         msg.message?.extendedTextMessage?.contextInfo ||
@@ -108,12 +145,11 @@ async function serializeMessage(sock, msg) {
         }
     }
 
-    const isOwner = checkOwner(sender, sock.user)
-
     return {
         id: msg.key?.id,
         from,
         sender,
+        senderNumber,
         pushName,
         isGroup,
         groupMetadata,
@@ -126,6 +162,9 @@ async function serializeMessage(sock, msg) {
         mimetype,
         quoted,
         isOwner,
+        isAdmin,
+        isBotAdmin,
+        isGroupOwner,
         isButtonResponse: !!msg.message?.interactiveResponseMessage,
         buttonId: msg.message?.interactiveResponseMessage?.buttonId || null,
         reply: async (text, options = {}) =>
