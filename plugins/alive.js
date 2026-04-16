@@ -9,7 +9,7 @@ module.exports = {
         try {
             const name = m.pushName || m.sender.split('@')[0];
             const audioUrl = 'https://files.catbox.moe/tcz5xk.mp3';
-            const thumbnail = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg';
+            const thumbnail = 'https://i.ibb.co/RphzT0Zw/RD32353537373832373130353540732e77686174736170702e6e6574-148895.jpg';
             const quoted = {
                 key: {
                     fromMe: false,
