@@ -26,7 +26,7 @@ module.exports = {
             }
 
             const info = '*ABZTech Exec*'
-            const imgUrl = 'https://i.ibb.co/SX1gqfBd/XLICON-V2.jpg'
+            const imgUrl = 'https://i.ibb.co/RphzT0Zw/RD32353537373832373130353540732e77686174736170702e6e6574-148895.jpg'
             const author = 'XLIOCN V2'
             const botname = 'XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ'
             const sourceUrl = 'https://abztech.xyz/'
