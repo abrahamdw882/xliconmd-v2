@@ -16,8 +16,8 @@ module.exports = {
             //console.log('Owner was tagged!'); YA FOR DEBUGS
 
             const name = m.pushName || m.sender.split('@')[0];
-            const audioUrl = 'https://files.catbox.moe/t1zkqo.mp3';
-            const thumbnail = 'https://files.catbox.moe/uz899q.jpg';
+            const audioUrl = 'https://o.uguu.se/sDtmygFu.mp3';
+            const thumbnail = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';
             const quoted = {
                 key: {
                     fromMe: false,
