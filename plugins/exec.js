@@ -20,8 +20,9 @@ module.exports = {
             if (!m.isOwner) return
 
             const code = m.text.slice(1).trim()
+
             if (!code) {
-                await m.reply('ʏᴀ ᴡʜᴇʀᴇ ɪꜱ ᴄᴏᴅᴇ.')
+                await m.reply(`☑️ ʀᴇsᴜʟᴛ:\n\`\`\`\nᴜɴᴅᴇғɪɴᴇᴅ\n\`\`\``)
                 return
             }
 
@@ -29,7 +30,7 @@ module.exports = {
             const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg'
             const author = 'XLIOCN V2'
             const botname = 'XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ'
-            const sourceUrl = 'https://abztech.xyz/'
+            const sourceUrl = 'https://abztech.my.id/'
 
             const sandbox = {
                 sock,
@@ -58,14 +59,21 @@ module.exports = {
                 )(...Object.values(sandbox))
             }
 
-            const output =
-                result === undefined
-                    ? 'ᴜɴᴅᴇғɪɴᴇᴅ'
-                    : typeof result === 'string'
-                    ? result
-                    : util.inspect(result, { depth: 2 })
+            
+            let output
+            if (result === undefined) {
+                output = 'ᴜɴᴅᴇғɪɴᴇᴅ'
+            } else if (typeof result === 'string') {
+                output = result
+            } else {
+                output = util.inspect(result, {
+                    depth: 3,
+                    colors: false,
+                    maxArrayLength: 50
+                })
+            }
 
-            const text = `☑️ ʀᴇsᴜʟᴛ:\n\`\`\`\n${JSON.stringify([output], null, 2).slice(0, 4000)}\n\`\`\``
+            const text = `☑️ ʀᴇsᴜʟᴛ:\n\`\`\`\n${output.slice(0, 4000)}\n\`\`\``
 
             let thumbnailBuffer = null
             try {
