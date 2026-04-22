@@ -1,0 +1,146 @@
+const fs = require('fs');
+
+module.exports = {
+    name: 'group',
+    description: 'Manage group settings',
+    aliases: ['gsettings', 'grup', 'gc'],
+    tags: ['group'],
+    command: /^\.?(group|gsettings|grup|gc)$/i,
+
+    async execute(sock, m, args) {
+        try {
+            if (!m.isGroup) {
+                await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ᴏɴʟʏ ʙᴇ ᴜꜱᴇᴅ ɪɴ ɢʀᴏᴜᴘꜱ`);
+                return;
+            }
+            
+            let isAdmin = false;
+            
+            if (m.groupMetadata && m.groupMetadata.participants) {
+                let senderNumber = m.sender || '';
+                senderNumber = senderNumber.split(':')[0];
+                senderNumber = senderNumber.split('@')[0];
+                
+                for (const p of m.groupMetadata.participants) {
+                    let participantNumber = p.phoneNumber || p.id || p.jid || '';
+                    participantNumber = participantNumber.split(':')[0];
+                    participantNumber = participantNumber.split('@')[0];
+                    
+                    if (participantNumber === senderNumber) {
+                        if (p.admin === 'admin' || p.admin === 'superadmin') {
+                            isAdmin = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            if (!isAdmin) {
+                await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ɪꜱ ᴏɴʟʏ ꜰᴏʀ ɢʀᴏᴜᴘ ᴀᴅᴍɪɴꜱ`);
+                return;
+            }
+            
+            if (!args.length) {
+                const currentName = m.groupMetadata?.subject || 'ᴜɴᴋɴᴏᴡɴ';
+                const currentDesc = m.groupMetadata?.desc?.toString() || 'ɴᴏ ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ';
+                const memberCount = m.groupMetadata?.participants?.length || 0;
+                
+                const infoText = `
+*ɢʀᴏᴜᴘ ɪɴꜰᴏʀᴍᴀᴛɪᴏɴ*
+
+ᴛɪᴛʟᴇ: ${currentName}
+ᴍᴇᴍʙᴇʀꜱ: ${memberCount}
+ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ: ${currentDesc.substring(0, 100)}
+
+ᴜꜱᴀɢᴇ:
+.ɢʀᴏᴜᴘ ɴᴀᴍᴇ <ᴛᴇxᴛ>
+.ɢʀᴏᴜᴘ ᴅᴇꜱᴄ <ᴛᴇxᴛ>
+.ɢʀᴏᴜᴘ ʀᴇꜱᴇᴛ
+
+> ᴜꜱᴇ ᴛʜᴇꜱᴇ ᴄᴏᴍᴍᴀɴᴅꜱ ᴛᴏ ᴍᴀɴᴀɢᴇ ʏᴏᴜʀ ɢʀᴏᴜᴘ
+                `.trim();
+                
+                await m.reply(infoText);
+                return;
+            }
+            
+            const command = args[0].toLowerCase();
+            const text = args.slice(1).join(' ');
+            
+            if (command === 'name') {
+                if (!text) {
+                    await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ɴᴇᴡ ɢʀᴏᴜᴘ ɴᴀᴍᴇ`);
+                    return;
+                }
+                
+                await sock.groupUpdateSubject(m.from, text);
+                
+                const successText = `
+✅ *ꜱᴜᴄᴄᴇꜱꜱ*
+
+ɢʀᴏᴜᴘ ɴᴀᴍᴇ ᴄʜᴀɴɢᴇᴅ
+
+ᴏʟᴅ: ${m.groupMetadata?.subject}
+ɴᴇᴡ: ${text}
+                `.trim();
+                
+                await m.reply(successText);
+            } 
+            else if (command === 'desc') {
+                if (!text) {
+                    await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ᴘʟᴇᴀꜱᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ɴᴇᴡ ɢʀᴏᴜᴘ ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ`);
+                    return;
+                }
+                
+                await sock.groupUpdateDescription(m.from, text);
+                
+                const successText = `
+✅ *ꜱᴜᴄᴄᴇꜱꜱ*
+
+ɢʀᴏᴜᴘ ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ ᴄʜᴀɴɢᴇᴅ
+
+ɴᴇᴡ ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ:
+${text.substring(0, 100)}
+                `.trim();
+                
+                await m.reply(successText);
+            }
+            else if (command === 'reset') {
+                await sock.groupUpdateDescription(m.from, '');
+                
+                const successText = `
+✅ *ꜱᴜᴄᴄᴇꜱꜱ*
+
+ɢʀᴏᴜᴘ ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ ʀᴇꜱᴇᴛ
+
+ᴅᴇꜱᴄʀɪᴘᴛɪᴏɴ ʜᴀꜱ ʙᴇᴇɴ ᴄʟᴇᴀʀᴇᴅ
+                `.trim();
+                
+                await m.reply(successText);
+            }
+            else {
+                await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ɪɴᴠᴀʟɪᴅ ᴏᴘᴛɪᴏɴ: ${command}
+
+ᴜꜱᴇ: ɴᴀᴍᴇ, ᴅᴇꜱᴄ, ᴏʀ ʀᴇꜱᴇᴛ`);
+            }
+            
+        } catch (err) {
+            console.error('Group Error:', err);
+            await m.reply(`❌ ᴇʀʀᴏʀ 
+    
+ꜰᴀɪʟᴇᴅ ᴛᴏ ᴜᴘᴅᴀᴛᴇ ɢʀᴏᴜᴘ ꜱᴇᴛᴛɪɴɢꜱ
+
+${err.message.substring(0, 50)}`);
+        }
+    }
+};
