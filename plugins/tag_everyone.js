@@ -39,7 +39,7 @@ module.exports = {
         const subject = args.length ? args.join(' ') : 'everyone';
 
         await sock.sendMessage(jid, {
-            text: '@everyone',
+            text: '@' + jid,
             contextInfo: {
                 mentionedJid: groupMetadata.participants.map(x => x.id),
                 groupMentions: [
