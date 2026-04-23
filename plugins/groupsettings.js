@@ -10,38 +10,11 @@ module.exports = {
     async execute(sock, m, args) {
         try {
             if (!m.isGroup) {
-                await m.reply(`❌ ᴇʀʀᴏʀ 
-    
-ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ᴏɴʟʏ ʙᴇ ᴜꜱᴇᴅ ɪɴ ɢʀᴏᴜᴘꜱ`);
-                return;
+                return await m.reply('ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴ ᴏɴʟʏ ʙᴇ ᴜsᴇᴅ ɪɴ ɢʀᴏᴜᴘs!');
             }
-            
-            let isAdmin = false;
-            
-            if (m.groupMetadata && m.groupMetadata.participants) {
-                let senderNumber = m.sender || '';
-                senderNumber = senderNumber.split(':')[0];
-                senderNumber = senderNumber.split('@')[0];
-                
-                for (const p of m.groupMetadata.participants) {
-                    let participantNumber = p.phoneNumber || p.id || p.jid || '';
-                    participantNumber = participantNumber.split(':')[0];
-                    participantNumber = participantNumber.split('@')[0];
-                    
-                    if (participantNumber === senderNumber) {
-                        if (p.admin === 'admin' || p.admin === 'superadmin') {
-                            isAdmin = true;
-                        }
-                        break;
-                    }
-                }
-            }
-            
-            if (!isAdmin) {
-                await m.reply(`❌ ᴇʀʀᴏʀ 
-    
-ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ɪꜱ ᴏɴʟʏ ꜰᴏʀ ɢʀᴏᴜᴘ ᴀᴅᴍɪɴꜱ`);
-                return;
+
+            if (!m.isOwner && !m.isAdmin) {
+                return await m.reply('ᴏɴʟʏ ɢʀᴏᴜᴘ ᴀᴅᴍɪɴs ᴏʀ ᴏᴡɴᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ!');
             }
             
             if (!args.length) {
