@@ -3,9 +3,10 @@ const axios = require('axios');
 module.exports = {
     name: 'menu',
     description: 'Show available bot commands',
+    aliases: ['help', 'cmdlist', 'commands'],
 
     async execute(sock, m) {
-        const prefix = '.';
+        const prefix = global.BOT_PREFIX || '.';
 
         const menuText = `
 XLIOCN *ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ*  
@@ -48,6 +49,7 @@ XLIOCN *ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ*
 │
 ╰─────────◆────────╯
 
+> ᴄᴜʀʀᴇɴᴛ ᴘʀᴇғɪx: ${prefix}
 > 「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」
         `.trim();
 
@@ -74,8 +76,8 @@ XLIOCN *ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ*
                 }
             });
         } catch (err) {
-            console.error('❌ Error sending menu:', err);
-            await m.reply('⚠️ Failed to send menu.');
+            console.error('Menu error:', err);
+            await m.reply('ғᴀɪʟᴇᴅ ᴛᴏ ʟᴏᴀᴅ ᴍᴇɴᴜ');
         }
     }
 };
