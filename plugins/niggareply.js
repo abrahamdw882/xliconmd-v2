@@ -11,7 +11,7 @@ module.exports = {
             if (m.sender !== target || !text.includes('blind fella')) return;
 
             const name = m.pushName || m.sender.split('@')[0];
-            const replyText = "My master isn't blind nigga.";
+            const replyText = "he isn't blind nigga.";
             const thumbnail = 'https://i.ibb.co/65fwTVG/carbon-3.png';
 
             const quoted = {
@@ -35,7 +35,7 @@ module.exports = {
                         mentionedJid: [m.sender],
                         externalAdReply: {
                             title: "bruh",
-                            body: "master look at this nigga",
+                            body: "look at this nigga",
                             thumbnailUrl: thumbnail,
                             sourceUrl: 'https://www.whatsapp.com/channel/0029VaMGgVL3WHTNkhzHik3c',
                             mediaType: 1,
