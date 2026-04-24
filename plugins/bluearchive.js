@@ -28,9 +28,7 @@ module.exports = {
 
             fs.writeFileSync(filePath, imageBuffer);
 
-            const caption = `*ʙʟᴜᴇ ᴀʀᴄʜɪᴠᴇ*
-
-ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ʙʏ XLICON V2`;
+            const caption = `ᴏᴋᴀʏ ғᴏʀ ʏᴏᴜ?`;
 
             await sock.sendMessage(m.from, {
                 image: fs.readFileSync(filePath),
