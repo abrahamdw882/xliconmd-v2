@@ -34,7 +34,7 @@ module.exports = {
 
             const result = response.data.result;
             
-            const videoUrl = result.wmplay || result.play;
+            const videoUrl = result.play;
             
             if (!videoUrl) {
                 return await m.reply('ɴᴏ ᴠɪᴅᴇᴏ ᴜʀʟ ғᴏᴜɴᴅ');
