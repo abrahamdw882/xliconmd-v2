@@ -23,11 +23,12 @@ module.exports = {
             }
 
             const image = await Jimp.read(buffer);
-            const processed = image
-                .scaleToFit(720, 720)
-                .quality(80);
+         
+            const processed = image.scaleToFit({ w: 720, h: 720 });
 
-            const finalBuffer = await processed.getBufferAsync(Jimp.MIME_JPEG);
+const finalBuffer = await processed.getBuffer('image/jpeg', {
+  quality: 80
+});
 
             await m.reply('⚙️ ᴜᴘᴅᴀᴛɪɴɢ ᴘʀᴏғɪʟᴇ ᴘɪᴄᴛᴜʀᴇ...');
 
