@@ -1,5 +1,5 @@
 require('./config')
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto,generateProfilePicture } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +9,13 @@ const { Boom } = require('@hapi/boom');
 const { sendButtons, sendInteractiveMessage } = require('gifted-btns');
 const serializeMessage = require('./handler.js');
 const JimpImport = require('jimp');
-const Jimp = JimpImport.read ? JimpImport : JimpImport.default;
+
+const Jimp =
+  JimpImport.read
+    ? JimpImport
+    : JimpImport.Jimp
+    ? JimpImport.Jimp
+    : JimpImport.default;
 
 global.generateWAMessageContent = generateWAMessageContent;
 global.generateWAMessageFromContent = generateWAMessageFromContent;
@@ -17,6 +23,7 @@ global.generateMessageID = generateMessageID;
 global.prepareWAMessageMedia = prepareWAMessageMedia;
 global.proto = proto;
 global.Jimp = Jimp;
+global.generateProfilePicture = generateProfilePicture;
 
 
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
