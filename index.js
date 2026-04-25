@@ -15,7 +15,7 @@ global.generateWAMessageFromContent = generateWAMessageFromContent;
 global.generateMessageID = generateMessageID;
 global.prepareWAMessageMedia = prepareWAMessageMedia;
 global.proto = proto;
-global.Jimp = Jimp;
+global.Jimp = jimp;
 
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
