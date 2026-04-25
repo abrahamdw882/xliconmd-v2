@@ -8,14 +8,16 @@ const QRCode = require('qrcode');
 const { Boom } = require('@hapi/boom');
 const { sendButtons, sendInteractiveMessage } = require('gifted-btns');
 const serializeMessage = require('./handler.js');
-const Jimp = require("jimp");
+const JimpImport = require('jimp');
+const Jimp = JimpImport.read ? JimpImport : JimpImport.default;
 
 global.generateWAMessageContent = generateWAMessageContent;
 global.generateWAMessageFromContent = generateWAMessageFromContent;
 global.generateMessageID = generateMessageID;
 global.prepareWAMessageMedia = prepareWAMessageMedia;
 global.proto = proto;
-global.Jimp = jimp;
+global.Jimp = Jimp;
+
 
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
