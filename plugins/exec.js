@@ -1,5 +1,6 @@
 const util = require('util')
 const axios = require('axios')
+const Jimp = global || require('jimp')
 
 let sentOnce = new Set()
 
@@ -37,6 +38,7 @@ module.exports = {
                 m,
                 axios,
                 util,
+                Jimp : global.Jimp,
                 console,
                 proto: global.proto,
                 prepareWAMessageMedia: global.prepareWAMessageMedia,
@@ -44,7 +46,7 @@ module.exports = {
                 generateWAMessageFromContent: global.generateWAMessageFromContent,
                 generateMessageID: global.generateMessageID
             }
-
+console.log('jimp:',typeof global.Jimp);
             const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
 
             let result
