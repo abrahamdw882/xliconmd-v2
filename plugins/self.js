@@ -23,15 +23,17 @@ module.exports = {
     },
     
     async onMessage(sock, m) {
-        if (!selfMode) return;
+        if (!selfMode) return false;
         
         let botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
         
-        if (global.owners.includes(m.sender) || m.sender === botNumber) return;
+        if (global.owners.includes(m.sender) || m.sender === botNumber) return false;
         
         if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
             await m.reply('🔒 *Bot is in self mode*\nOnly bot & owners can use commands.');
             return true;
         }
+        
+        return false;
     }
 };
