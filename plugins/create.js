@@ -24,10 +24,10 @@ module.exports = {
             
             const buffer = Buffer.from(response.data);
             
-            await sock.sendMessage(m.from, {
+           await sock.sendMessage(m.from, {
                 image: buffer,
                 caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ`
-            });
+            }, { quoted: m }); 
             
         } catch (err) {
             console.error('genimg error:', err);
