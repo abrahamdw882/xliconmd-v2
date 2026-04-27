@@ -6,19 +6,19 @@ module.exports = {
     
     async execute(sock, m, args) {
         if (!global.owners.includes(m.sender)) {
-            return m.reply('❌ Only bot owners can use this command');
+            return;
         }
         
         if (args[0] === 'on') {
             selfMode = true;
-            m.reply('✅ Self mode ON - Only bot & owners can use bot');
+            m.reply('sᴇʟғ ᴍᴏᴅᴇ ᴏɴ - ᴏɴʟʏ ʙᴏᴛ & ᴏᴡɴᴇʀs ᴄᴀɴ ᴜsᴇ ʙᴏᴛ');
         } 
         else if (args[0] === 'off') {
             selfMode = false;
-            m.reply('✅ Self mode OFF - Everyone can use bot');
+            m.reply('sᴇʟғ ᴍᴏᴅᴇ ᴏғғ - ᴇᴠᴇʀʏᴏɴᴇ ᴄᴀɴ ᴜsᴇ ʙᴏᴛ');
         }
         else {
-            m.reply(`⚙️ Self mode: ${selfMode ? 'ON (bot & owners only)' : 'OFF (everyone)'}\n\nUse: .self on/off`);
+            m.reply(`sᴇʟғ ᴍᴏᴅᴇ: ${selfMode ? 'ᴏɴ (ʙᴏᴛ & ᴏᴡɴᴇʀs ᴏɴʟʏ)' : 'ᴏғғ (ᴇᴠᴇʀʏᴏɴᴇ)'}\n\nᴜsᴇ: .sᴇʟғ ᴏɴ/ᴏғғ`);
         }
     },
     
@@ -30,7 +30,6 @@ module.exports = {
         if (global.owners.includes(m.sender) || m.sender === botNumber) return false;
         
         if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
-            await m.reply('🔒 *Bot is in self mode*\nOnly bot & owners can use commands.');
             return true;
         }
         
