@@ -22,8 +22,10 @@ module.exports = {
                 responseType: 'arraybuffer'
             });
             
+            const buffer = Buffer.from(response.data);
+            
             await sock.sendMessage(m.chat, {
-                image: Buffer.from(response.data),
+                image: buffer,
                 caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ`
             });
             
