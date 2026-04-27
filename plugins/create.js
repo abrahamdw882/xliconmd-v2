@@ -19,15 +19,13 @@ module.exports = {
             const response = await axios({
                 method: 'get',
                 url: imageUrl,
-                responseType: 'arraybuffer'
+                responseType: 'arraybuffer',
+                timeout: 30000
             });
             
             const buffer = Buffer.from(response.data);
             
-           await sock.sendMessage(m.from, {
-                image: buffer,
-                caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ`
-            }, { quoted: m }); 
+            await m.reply(buffer, { caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ` });
             
         } catch (err) {
             console.error('genimg error:', err);
