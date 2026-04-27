@@ -1,46 +1,29 @@
 const axios = require('axios');
-const fs = require('fs');
 
 module.exports = {
     name: 'bluearchive',
-    description: 'Fetch random Blue Archive image',
     aliases: ['ba', 'blue'],
-    tags: ['anime'],
-    command: /^\.?(bluearchive|ba|blue)$/i,
-
+    
     async execute(sock, m, args) {
+        await m.reply(`ғᴇᴛᴄʜɪɴɢ ʙʟᴜᴇ ᴀʀᴄʜɪᴠᴇ ɪᴍᴀɢᴇ...`);
+        
         try {
-            await m.reply('ғᴇᴛᴄʜɪɴɢ ʙʟᴜᴇ ᴀʀᴄʜɪᴠᴇ ɪᴍᴀɢᴇ...');
-
-            const apiUrl = 'https://api-rebix.zone.id/api/bluearchive';
+            const imageUrl = `https://api-rebix.zone.id/api/bluearchive`;
             
-            const response = await axios.get(apiUrl, {
-                responseType: 'arraybuffer'
+            const response = await axios({
+                method: 'get',
+                url: imageUrl,
+                responseType: 'arraybuffer',
+                timeout: 30000
             });
-
-            const imageBuffer = Buffer.from(response.data);
-            const fileName = `bluearchive_${Date.now()}.jpg`;
-            const filePath = `./temp/${fileName}`;
-
-            if (!fs.existsSync('./temp')) {
-                fs.mkdirSync('./temp', { recursive: true });
-            }
-
-            fs.writeFileSync(filePath, imageBuffer);
-
-            const caption = `ᴏᴋᴀʏ ғᴏʀ ʏᴏᴜ?`;
-
-            await sock.sendMessage(m.from, {
-                image: fs.readFileSync(filePath),
-                caption: caption,
-                mimetype: 'image/jpeg'
-            });
-
-            fs.unlinkSync(filePath);
-
+            
+            const buffer = Buffer.from(response.data);
+            
+            await m.reply(buffer, { caption: `ᴏᴋᴀʏ ғᴏʀ ʏᴏᴜ?` });
+            
         } catch (err) {
-            console.error('BlueArchive Error:', err);
-            await m.reply(`ᴇʀʀᴏʀ: ${err.message}`);
+            console.error('bluearchive error:', err);
+            await m.reply(`ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ɪᴍᴀɢᴇ\n\n${err.message}`);
         }
     }
 };
