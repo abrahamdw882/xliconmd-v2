@@ -24,7 +24,7 @@ module.exports = {
             
             const buffer = Buffer.from(response.data);
             
-            await sock.sendMessage(m.chat, {
+            await sock.sendMessage(m.from, {
                 image: buffer,
                 caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ`
             });
