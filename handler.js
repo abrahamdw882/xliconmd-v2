@@ -167,8 +167,20 @@ async function serializeMessage(sock, msg) {
         isGroupOwner,
         isButtonResponse: !!msg.message?.interactiveResponseMessage,
         buttonId: msg.message?.interactiveResponseMessage?.buttonId || null,
-        reply: async (text, options = {}) =>
-            await sock.sendMessage(from, { text, ...options }, { quoted: msg }),
+        reply: async (content, options = {}) => {
+            if (typeof content === 'string') {
+                return await sock.sendMessage(from, { text: content, ...options }, { quoted: msg })
+            }
+            else if (Buffer.isBuffer(content)) {
+                return await sock.sendMessage(from, { image: content, ...options }, { quoted: msg })
+            }
+            else if (typeof content === 'object') {
+                return await sock.sendMessage(from, content, { quoted: msg })
+            }
+            else {
+                return await sock.sendMessage(from, { text: String(content), ...options }, { quoted: msg })
+            }
+        },
         send: async (content, options = {}) =>
             await sock.sendMessage(
                 from,
