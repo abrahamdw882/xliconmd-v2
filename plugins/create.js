@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 module.exports = {
     name: 'genimg',
@@ -16,16 +16,14 @@ module.exports = {
         try {
             const imageUrl = `https://api-abztech.zone.id/ai/genimg?text=${encodeURIComponent(text)}`;
             
-            const response = await fetch(imageUrl);
-            
-            if (!response.ok) {
-                throw new Error(`ᴀᴘɪ ʀᴇᴛᴜʀɴᴇᴅ ${response.status}`);
-            }
-            
-            const buffer = await response.buffer();
+            const response = await axios({
+                method: 'get',
+                url: imageUrl,
+                responseType: 'arraybuffer'
+            });
             
             await sock.sendMessage(m.chat, {
-                image: buffer,
+                image: Buffer.from(response.data),
                 caption: `ʜᴇʀᴇ ʏᴏᴜ ɢᴏ`
             });
             
