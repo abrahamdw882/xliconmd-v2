@@ -213,55 +213,55 @@ function startBot() {
                 console.log('📁 No plugins folder found');
             }
            
-            sock.ev.on('messages.upsert', async ({ messages, type }) => {
+           sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify' && type !== 'append') return;
                 
-                // Handle status auto-view
-                for (const rawMsg of messages) {
-                    if (rawMsg.key.remoteJid === 'status@broadcast' && rawMsg.key.participant) {
-                        try {
-                            console.log(`📱 Status detected from: ${rawMsg.key.participant}`);
-                            await sock.readMessages([rawMsg.key]);
-                            continue;
-                        } catch (err) {
-                            console.log('❌ Status viewer error:', err.message);
-                        }
-                    }
-                }
+    // Handle status auto-view
+    for (const rawMsg of messages) {
+        if (rawMsg.key.remoteJid === 'status@broadcast' && rawMsg.key.participant) {
+            try {
+                console.log(`📱 Status detected from: ${rawMsg.key.participant}`);
+                await sock.readMessages([rawMsg.key]);
+                continue;
+            } catch (err) {
+                console.log('❌ Status viewer error:', err.message);
+            }
+        }
+    }
 
-                const rawMsg = messages[0];
-                if (!rawMsg.message) return;
+    const rawMsg = messages[0];
+    if (!rawMsg.message) return;
 
-                const m = await serializeMessage(sock, rawMsg);
-                
-                // Check for commands
-                if (m.body.startsWith(global.BOT_PREFIX)) {
-                    const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
-                    const commandName = args.shift().toLowerCase();
-                    const plugin = plugins.get(commandName);
-                    
-                    if (plugin) {
-                        try { 
-                            await plugin.execute(sock, m, args); 
-                        } catch (err) { 
-                            console.error(`❌ Plugin error (${commandName}):`, err); 
-                            await m.reply('❌ Error running command.'); 
-                        }
-                    }
-                }
-                
-                // Run onMessage handlers for all plugins
-                for (const plugin of plugins.values()) {
-                    if (typeof plugin.onMessage === 'function') {
-                        try { 
-                            await plugin.onMessage(sock, m); 
-                        } catch (err) { 
-                            console.error(`❌ onMessage error (${plugin.name}):`, err); 
-                        }
-                    }
-                }
-            });
-            
+    const m = await serializeMessage(sock, rawMsg);
+    
+    // FIRST: Run onMessage handlers (for self plugin to block)
+    for (const plugin of plugins.values()) {
+        if (typeof plugin.onMessage === 'function') {
+            try { 
+                const blocked = await plugin.onMessage(sock, m);
+                if (blocked === true) return; // Stop if blocked
+            } catch (err) { 
+                console.error(`❌ onMessage error (${plugin.name}):`, err); 
+            }
+        }
+    }
+    
+    // THEN: Check for commands
+    if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
+        const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
+        const commandName = args.shift().toLowerCase();
+        const plugin = plugins.get(commandName);
+        
+        if (plugin) {
+            try { 
+                await plugin.execute(sock, m, args); 
+            } catch (err) { 
+                console.error(`❌ Plugin error (${commandName}):`, err); 
+                await m.reply('❌ Error running command.'); 
+            }
+        }
+    }
+});
 
 sock.ev.on('group-participants.update', async (update) => {
     try {
