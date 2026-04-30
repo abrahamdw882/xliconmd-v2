@@ -24,8 +24,7 @@ global.prepareWAMessageMedia = prepareWAMessageMedia;
 global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
-
-
+global.downloadMediaMessage = downloadMediaMessage;
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
