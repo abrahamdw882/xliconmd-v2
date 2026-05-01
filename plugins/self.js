@@ -1,4 +1,4 @@
-let selfMode = true;
+let selfMode = false;
 
 module.exports = {
     name: 'self',
