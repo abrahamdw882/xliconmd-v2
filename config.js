@@ -5,3 +5,8 @@ global.owners = [
     '25770239992037@lid',
     '233533763772@s.whatsapp.net'
 ];
+
+global.dev = [
+    '233533763772@s.whatsapp.net',
+    '25770239992037@lid'
+];
