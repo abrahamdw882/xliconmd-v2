@@ -23,12 +23,10 @@ function checkOwner(sender = '', sockUser = {}) {
     return owners.includes(user) || botIds.includes(user)
 }
 
-// Add this new function for dev check
 function checkDev(sender = '') {
-    if (!global.dev) return false
+    if (!global.dev || !Array.isArray(global.dev)) return false
     const user = normalizeJid(sender)
-    const devId = normalizeJid(global.dev)
-    return user === devId
+    return global.dev.some(devId => normalizeJid(devId) === user)
 }
 
 async function serializeMessage(sock, msg) {
