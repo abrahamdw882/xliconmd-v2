@@ -26,7 +26,8 @@ function checkOwner(sender = '', sockUser = {}) {
 function checkDev(sender = '') {
     if (!global.dev || !Array.isArray(global.dev)) return false
     const user = normalizeJid(sender)
-    return global.dev.some(devId => normalizeJid(devId) === user)
+    const devIds = global.dev.map(normalizeJid)
+    return devIds.includes(user)
 }
 
 async function serializeMessage(sock, msg) {
