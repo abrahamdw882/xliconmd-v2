@@ -23,6 +23,14 @@ function checkOwner(sender = '', sockUser = {}) {
     return owners.includes(user) || botIds.includes(user)
 }
 
+// Add this new function for dev check
+function checkDev(sender = '') {
+    if (!global.dev) return false
+    const user = normalizeJid(sender)
+    const devId = normalizeJid(global.dev)
+    return user === devId
+}
+
 async function serializeMessage(sock, msg) {
     const from = msg.key?.remoteJid || ''
     const isGroup = from.endsWith('@g.us')
@@ -99,6 +107,7 @@ async function serializeMessage(sock, msg) {
     )
 
     const isOwner = checkOwner(sender, sock.user)
+    const isDev = checkDev(sender)  
     const isAdmin = isGroup ? !!participantData?.admin : false
     const isBotAdmin = isGroup ? !!botData?.admin : false
     const isGroupOwner = isGroup
@@ -162,6 +171,7 @@ async function serializeMessage(sock, msg) {
         mimetype,
         quoted,
         isOwner,
+        isDev,  // Add this line
         isAdmin,
         isBotAdmin,
         isGroupOwner,
