@@ -2,7 +2,7 @@ const axios = require('axios');
 
 module.exports = {
     name: 'ai',
-    description: 'Ask AI a question',
+    description: 'Ask AI any question',
     aliases: ['ask'],
     tags: ['ai'],
     command: /^\.?(ai|ask)/i,
