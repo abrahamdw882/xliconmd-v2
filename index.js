@@ -30,6 +30,17 @@ global.downloadMediaMessage = downloadMediaMessage;
 global.autoviewstatus = true;  // Auto-view status
 global.autolikestatus = true;  // Auto-react with random emojis
 
+// Anti-spam cache for statuses
+global.reactedStatuses = new Set(); // Track reacted statuses
+global.viewedStatuses = new Set();  // Track viewed statuses
+
+// Clean up old cache entries every hour to prevent memory leak
+setInterval(() => {
+    if (global.reactedStatuses) global.reactedStatuses.clear();
+    if (global.viewedStatuses) global.viewedStatuses.clear();
+    console.log('🧹 Cleared status cache (anti-spam reset)');
+}, 3600000); // Clear every hour
+
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
@@ -228,13 +239,13 @@ function startBot() {
                 console.log('📁 No plugins folder found');
             }
            
-            // MAIN MESSAGE HANDLER WITH STATUS SUPPORT
+            // MAIN MESSAGE HANDLER WITH STATUS SUPPORT & ANTI-SPAM
             sock.ev.on('messages.upsert', async ({ messages, type }) => {
                 if (type !== 'notify' && type !== 'append') return;
                 
                 // Handle all messages including status
                 for (const rawMsg of messages) {
-                    // ENHANCED STATUS HANDLING
+                    // ENHANCED STATUS HANDLING WITH DUPLICATE PREVENTION
                     if (rawMsg.key.remoteJid === 'status@broadcast') {
                         try {
                             const participantJid = resolveStatusTarget(rawMsg);
@@ -243,30 +254,39 @@ function startBot() {
                                 continue;
                             }
 
-                            const statusKey = {
-                                remoteJid: 'status@broadcast',
-                                id: rawMsg.key.id,
-                                fromMe: false,
-                                participant: participantJid
-                            };
+                            const statusId = rawMsg.key.id;
+                            const uniqueKey = `${statusId}_${participantJid}`;
 
-                            // Auto-view status
-                            if (global.autoviewstatus) {
-                                await sock.readMessages([statusKey]);
+                            // Auto-view status (only once per status)
+                            if (global.autoviewstatus && !global.viewedStatuses.has(uniqueKey)) {
+                                await sock.readMessages([{
+                                    remoteJid: 'status@broadcast',
+                                    id: statusId,
+                                    fromMe: false,
+                                    participant: participantJid
+                                }]);
+                                global.viewedStatuses.add(uniqueKey);
                                 console.log(`👀 Viewed status from ${participantJid}`);
                             }
 
-                            
-                            if (global.autolikestatus) {
+                            // Auto-reaction (only once per status)
+                            if (global.autolikestatus && !global.reactedStatuses.has(uniqueKey)) {
                                 const emojis = ['❤️','💸','😇','🍂','💥','💯','🔥','💫','💎','💗','🤍','🖤','👀','🙌','🙆','🚩','🥰','💐','😎','🤎','✅','⚡','🧡','😁','😄','🌸','🕊️','🌷','⛅','🌟','🗿','☠️','💜','💙','🌝','💚'];
                                 const emoji = emojis[Math.floor(Math.random() * emojis.length)];
                                 
-                                await sock.sendMessage(
-                                    'status@broadcast',
-                                    { react: { text: emoji, key: statusKey } },
-                                    { statusJidList: [participantJid] }
-                                );
+                                await sock.sendMessage('status@broadcast', {
+                                    react: { 
+                                        text: emoji, 
+                                        key: {
+                                            remoteJid: 'status@broadcast',
+                                            id: statusId,
+                                            fromMe: false,
+                                            participant: participantJid
+                                        }
+                                    }
+                                });
                                 
+                                global.reactedStatuses.add(uniqueKey);
                                 console.log(`✅ Reacted to status from ${participantJid} with ${emoji}`);
                             }
                             
@@ -349,7 +369,8 @@ function startBot() {
             
             // Handle message reactions
             sock.ev.on('messages.reaction', async (reactions) => {
-                console.log('💖 Reaction update:', reactions);
+                // Only log if you want to see reactions (can be commented out)
+                // console.log('💖 Reaction update:', reactions);
             });
 
         } catch (error) {
@@ -360,7 +381,7 @@ function startBot() {
     })();
 }
 
-// SIMPLE HTML SERVER (same as before)
+// SIMPLE HTML SERVER
 const server = http.createServer((req, res) => {
     const url = req.url;
     
