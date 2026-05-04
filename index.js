@@ -1,1 +1,1105 @@
-const _0x55afd1=_0x5333;(function(_0x35231d,_0x5e8edd){const _0x507352=_0x5333,_0x5b88b8=_0x35231d();while(!![]){try{const _0x2d19e7=-parseInt(_0x507352(0x1e0))/0x1+-parseInt(_0x507352(0x249))/0x2+-parseInt(_0x507352(0x20e))/0x3+parseInt(_0x507352(0x251))/0x4*(-parseInt(_0x507352(0x1dd))/0x5)+parseInt(_0x507352(0x236))/0x6*(-parseInt(_0x507352(0x250))/0x7)+-parseInt(_0x507352(0x25d))/0x8+parseInt(_0x507352(0x211))/0x9*(parseInt(_0x507352(0x206))/0xa);if(_0x2d19e7===_0x5e8edd)break;else _0x5b88b8['push'](_0x5b88b8['shift']());}catch(_0x4ac6e2){_0x5b88b8['push'](_0x5b88b8['shift']());}}}(_0x8d06,0xbaca4),require(_0x55afd1(0x21c)));const {default:makeWASocket,useMultiFileAuthState,DisconnectReason,downloadMediaMessage,generateWAMessageContent,generateWAMessageFromContent,generateMessageID,prepareWAMessageMedia,fetchLatestWaWebVersion,proto,generateProfilePicture}=require(_0x55afd1(0x252)),pino=require(_0x55afd1(0x21b)),fs=require('fs'),path=require(_0x55afd1(0x26e)),http=require(_0x55afd1(0x204)),QRCode=require('qrcode'),{Boom}=require('@hapi/boom'),{sendButtons,sendInteractiveMessage}=require(_0x55afd1(0x246)),serializeMessage=require('./handler.js'),JimpImport=require('jimp'),Jimp=JimpImport['read']?JimpImport:JimpImport[_0x55afd1(0x245)]?JimpImport['Jimp']:JimpImport[_0x55afd1(0x248)];global[_0x55afd1(0x1ff)]=generateWAMessageContent,global[_0x55afd1(0x235)]=generateWAMessageFromContent,global[_0x55afd1(0x221)]=generateMessageID,global[_0x55afd1(0x274)]=prepareWAMessageMedia,global['proto']=proto,global[_0x55afd1(0x245)]=Jimp,global[_0x55afd1(0x23d)]=generateProfilePicture,global[_0x55afd1(0x225)]=downloadMediaMessage;if(!fs[_0x55afd1(0x230)](__dirname+_0x55afd1(0x213))&&global[_0x55afd1(0x269)])try{const sessionData=JSON[_0x55afd1(0x226)](global['sessionid']);fs[_0x55afd1(0x1ea)](__dirname+_0x55afd1(0x227),{'recursive':!![]}),fs[_0x55afd1(0x210)](__dirname+_0x55afd1(0x213),JSON[_0x55afd1(0x1f6)](sessionData,null,0x2));}catch(_0x5440b3){console[_0x55afd1(0x1fd)](_0x55afd1(0x25f),_0x5440b3);}const AUTH_FOLDER=_0x55afd1(0x229),PLUGIN_FOLDER='./plugins',PORT=process.env.PORT||0xbb8;let latestQR='',botStatus=_0x55afd1(0x1ec),pairingCodes=new Map(),presenceInterval=null,sock=null,isConnecting=![];function _0x5333(_0x437444,_0x29c285){_0x437444=_0x437444-0x1db;const _0x8d0651=_0x8d06();let _0x5333cc=_0x8d0651[_0x437444];return _0x5333cc;}function _0x8d06(){const _0x1405b0=['listen','🌐\x20Web\x20server\x20running\x20at\x20http://localhost:','downloadMediaMessage','parse','/session','user','./session','messages.reaction','📁\x20Using\x20existing\x20session...','shift','config.json','messages.upsert','connected','existsSync','info','\x0a👋\x20Shutting\x20down\x20gracefully...','💖\x20Reaction\x20update:','uncaughtException','generateWAMessageFromContent','1350DYByFN','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2>❌\x20Error:\x20Phone\x20number\x20required</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20href=\x22/pair\x22>Try\x20Again</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','function','add','ya\x20@','data','rmSync','generateProfilePicture','❌\x20Pair\x20error:','phoneNumber','connecting','✅\x20Loaded\x20prefix:\x20','utf8','trim','body','Jimp','gifted-btns','aliases','default','1733104jplIAl','📁\x20No\x20plugins\x20folder\x20found','writeHead','reply','slice','\x20has\x20left\x20the\x20group.\x0aWe\x20are\x20not\x20gonna\x20miss\x20you!','\x0a<!DOCTYPE\x20html>\x0a<html>\x0a<head>\x0a\x20\x20\x20\x20<style>\x0a\x20\x20\x20\x20\x20\x20\x20\x20body\x20{\x20font-family:\x20Arial;\x20padding:\x2020px;\x20text-align:\x20center;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20form\x20{\x20margin:\x2020px;\x20padding:\x2020px;\x20background:\x20#f0f0f0;\x20display:\x20inline-block;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20input,\x20button\x20{\x20padding:\x2010px;\x20margin:\x205px;\x20}\x0a\x20\x20\x20\x20</style>\x0a</head>\x0a<body>\x0a\x20\x20\x20\x20<h1>🔗\x20Pair\x20WhatsApp</h1>\x0a\x20\x20\x20\x20<form\x20method=\x22POST\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20Phone:\x20<input\x20type=\x22text\x22\x20name=\x22phone\x22\x20placeholder=\x22911234567890\x22\x20required><br><br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22submit\x22>Get\x20Code</button><br><br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<a\x20href=\x22/\x22>←\x20Back</a>\x0a\x20\x20\x20\x20</form>\x0a</body>\x0a</html>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','46837oBlkrr','4RwxwWW','@whiskeysockets/baileys','</h2>\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20<div\x20class=\x22code\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20Code:\x20','prefix','text/html;\x20charset=utf-8','close','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<h1>404\x20-\x20Page\x20Not\x20Found</h1>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<a\x20href=\x22/\x22>🏠\x20Go\x20Home</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','statusCode','toLocaleString','group-participants.update','application/json','endsWith','2447824UyMDjv','loggedOut','Error\x20restoring\x20session:','✅\x20Loaded\x20plugin:\x20','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Please\x20wait\x20for\x20QR\x20code\x20to\x20appear\x20first</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20href=\x22/\x22>←\x20Go\x20Back</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','readMessages',',\x20isLatest:\x20','filter','⚠️\x20Invalid\x20plugin\x20structure\x20in\x20','replace','⚠️\x20Invalid\x20session\x20detected,\x20will\x20create\x20new\x20one...','📦\x20Total\x20plugins\x20loaded:\x20','sessionid','readFileSync','notify','startsWith','💾\x20Credentials\x20updated','path','join','sendMessage','📱\x20Using\x20WA\x20v','size','✅\x20Pairing\x20code\x20for\x20','prepareWAMessageMedia','code','Bot','forEach','1.0.0','BOT_PREFIX','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2>⚠️\x20Bot\x20not\x20ready</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Status:\x20','5563845LjBLEY','url','🤖\x20Bot\x20linked\x20successfully!\x0a📝\x20Current\x20prefix:\x20','1112762VaKTWt','action','createServer','available','name','👋\x20Welcome\x20@','phone','end','owners','now','mkdirSync','length','disconnected','\x0a<!DOCTYPE\x20html>\x0a<html>\x0a<head>\x0a\x20\x20\x20\x20<style>\x0a\x20\x20\x20\x20\x20\x20\x20\x20body\x20{\x20font-family:\x20Arial;\x20padding:\x2020px;\x20text-align:\x20center;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20.code\x20{\x20font-size:\x202em;\x20color:\x20green;\x20font-weight:\x20bold;\x20margin:\x2020px;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20.info\x20{\x20background:\x20#e8f5e8;\x20padding:\x2015px;\x20margin:\x2020px;\x20border-radius:\x205px;\x20}\x0a\x20\x20\x20\x20</style>\x0a</head>\x0a<body>\x0a\x20\x20\x20\x20<h1>✅\x20Pairing\x20Code\x20Generated</h1>\x0a\x20\x20\x20\x20<h2>Phone:\x20','🚀\x20Starting\x20WhatsApp\x20Bot...','/pair','split','/api/status','⚠️\x20Unhandled\x20Rejection:','toDataURL','uptime','GET','stringify','open','❌\x20Error\x20running\x20command.','❌\x20Plugin\x20error\x20(','.js','participants','text/html','error','key','generateWAMessageContent','Chrome','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2>❌\x20Error</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>','creds.json','requestPairingCode','http','log','57340730QwCEUB','📱\x20Status\x20detected\x20from:\x20','toLowerCase','method','isArray','sendPresenceUpdate','execute','message','196335vxjSWb','output','writeFileSync','9omLcya','❌\x20Failed\x20to\x20load\x20plugin\x20','/session/creds.json','\x0a⏰\x20Connected\x20at:\x20','participant','enabled','welcomeConfig','onMessage','creds.update','❌\x20Error\x20loading\x20plugins:','pino','./config','set','includes','noiseKey','/qr','generateMessageID','values'];_0x8d06=function(){return _0x1405b0;};return _0x8d06();}function loadPrefix(){const _0x2503b2=_0x55afd1,_0x897f7f=path[_0x2503b2(0x26f)](__dirname,_0x2503b2(0x22d));if(fs['existsSync'](_0x897f7f))try{const _0x5c399e=JSON[_0x2503b2(0x226)](fs[_0x2503b2(0x26a)](_0x897f7f,'utf8'));_0x5c399e[_0x2503b2(0x254)]&&(global[_0x2503b2(0x1db)]=_0x5c399e[_0x2503b2(0x254)],console['log'](_0x2503b2(0x241)+global[_0x2503b2(0x1db)]));}catch(_0x512088){console[_0x2503b2(0x1fd)]('Error\x20loading\x20config:',_0x512088);}startBot();}function startBot(){const _0x13128b=_0x55afd1;console['log'](_0x13128b(0x1ee)),isConnecting=!![];!fs[_0x13128b(0x230)](AUTH_FOLDER)&&fs[_0x13128b(0x1ea)](AUTH_FOLDER,{'recursive':!![]});const _0x3ee790=path[_0x13128b(0x26f)](AUTH_FOLDER,_0x13128b(0x202));if(fs[_0x13128b(0x230)](_0x3ee790))try{const _0x183015=JSON['parse'](fs['readFileSync'](_0x3ee790,_0x13128b(0x242)));_0x183015[_0x13128b(0x21f)]&&_0x183015[_0x13128b(0x21f)]['private']?console[_0x13128b(0x205)](_0x13128b(0x22b)):console[_0x13128b(0x205)](_0x13128b(0x267));}catch(_0x240d3f){console['log']('⚠️\x20Corrupted\x20session,\x20will\x20create\x20new\x20one...');}((async()=>{const _0x47ee84=_0x13128b;try{const {version:_0x2b7a4e,isLatest:_0x2522e6}=await fetchLatestWaWebVersion();console[_0x47ee84(0x205)](_0x47ee84(0x271)+_0x2b7a4e['join']('.')+_0x47ee84(0x263)+_0x2522e6);const {state:_0x30f8a9,saveCreds:_0x50ae67}=await useMultiFileAuthState(AUTH_FOLDER);sock=makeWASocket({'version':_0x2b7a4e,'logger':pino({'level':_0x47ee84(0x231)}),'auth':_0x30f8a9,'printQRInTerminal':!![],'keepAliveIntervalMs':0x2710,'markOnlineOnConnect':!![],'syncFullHistory':![],'browser':[_0x47ee84(0x276),_0x47ee84(0x200),_0x47ee84(0x278)]}),sock['ev']['on']('connection.update',async _0x266d62=>{const _0x550519=_0x47ee84,{connection:_0x24191f,lastDisconnect:_0x15faba,qr:_0x43d6c9}=_0x266d62;_0x43d6c9&&QRCode[_0x550519(0x1f3)](_0x43d6c9,(_0x4c6098,_0x69c6a0)=>{!_0x4c6098&&(latestQR=_0x69c6a0);});if(_0x24191f===_0x550519(0x256)){botStatus=_0x550519(0x1ec),isConnecting=![];presenceInterval&&(clearInterval(presenceInterval),presenceInterval=null);const _0x1ec3fa=_0x15faba?.[_0x550519(0x1fd)]instanceof Boom?_0x15faba['error'][_0x550519(0x20f)][_0x550519(0x258)]:0x0,_0x5ef05d=_0x1ec3fa!==DisconnectReason[_0x550519(0x25e)];_0x5ef05d?setTimeout(()=>startBot(),0x1388):(fs[_0x550519(0x230)](AUTH_FOLDER)&&fs[_0x550519(0x23c)](AUTH_FOLDER,{'recursive':!![],'force':!![]}),setTimeout(()=>startBot(),0xbb8));}else{if(_0x24191f===_0x550519(0x1f7)){botStatus=_0x550519(0x22f),isConnecting=![];if(!global[_0x550519(0x1e8)])global['owners']=[];!global[_0x550519(0x1e8)][_0x550519(0x21e)](sock[_0x550519(0x228)]['id'])&&global[_0x550519(0x1e8)]['push'](sock[_0x550519(0x228)]['id']);presenceInterval=setInterval(()=>{const _0x2e1ae4=_0x550519;sock?.['ws']?.['readyState']===0x1&&sock[_0x2e1ae4(0x20b)](_0x2e1ae4(0x1e3));},0x2710);try{await sock[_0x550519(0x270)](sock[_0x550519(0x228)]['id'],{'text':_0x550519(0x1df)+global[_0x550519(0x1db)]+'\x0a👑\x20Owners:\x20'+global[_0x550519(0x1e8)][_0x550519(0x1eb)]+_0x550519(0x214)+new Date()[_0x550519(0x259)]()});}catch(_0x18fc0e){}}else _0x24191f===_0x550519(0x240)&&(botStatus=_0x550519(0x240),isConnecting=!![]);}}),sock['ev']['on'](_0x47ee84(0x219),async()=>{const _0x4c5d69=_0x47ee84;await _0x50ae67(),console['log'](_0x4c5d69(0x26d));});const _0x86ea85=new Map(),_0x417700=path[_0x47ee84(0x26f)](__dirname,PLUGIN_FOLDER);if(fs['existsSync'](_0x417700))try{const _0x280ddb=fs['readdirSync'](_0x417700)[_0x47ee84(0x264)](_0x49ff94=>_0x49ff94[_0x47ee84(0x25c)](_0x47ee84(0x1fa)));for(const _0x5922b0 of _0x280ddb){try{const _0x6044ba=require(path[_0x47ee84(0x26f)](_0x417700,_0x5922b0));_0x6044ba['name']&&typeof _0x6044ba[_0x47ee84(0x20c)]===_0x47ee84(0x238)?(_0x86ea85[_0x47ee84(0x21d)](_0x6044ba[_0x47ee84(0x1e4)][_0x47ee84(0x208)](),_0x6044ba),Array[_0x47ee84(0x20a)](_0x6044ba[_0x47ee84(0x247)])&&_0x6044ba[_0x47ee84(0x247)][_0x47ee84(0x277)](_0x20d2a8=>{const _0x4f5179=_0x47ee84;_0x86ea85[_0x4f5179(0x21d)](_0x20d2a8[_0x4f5179(0x208)](),_0x6044ba);}),console['log'](_0x47ee84(0x260)+_0x6044ba[_0x47ee84(0x1e4)])):console['warn'](_0x47ee84(0x265)+_0x5922b0);}catch(_0x44f589){console[_0x47ee84(0x1fd)](_0x47ee84(0x212)+_0x5922b0+':',_0x44f589[_0x47ee84(0x20d)]);}}console['log'](_0x47ee84(0x268)+_0x86ea85[_0x47ee84(0x272)]);}catch(_0x468aae){console[_0x47ee84(0x1fd)](_0x47ee84(0x21a),_0x468aae);}else console['log'](_0x47ee84(0x24a));sock['ev']['on'](_0x47ee84(0x22e),async({messages:_0xd756a1,type:_0x4541a7})=>{const _0x2a864a=_0x47ee84;if(_0x4541a7!==_0x2a864a(0x26b)&&_0x4541a7!=='append')return;for(const _0x47a424 of _0xd756a1){if(_0x47a424[_0x2a864a(0x1fe)]['remoteJid']==='status@broadcast'&&_0x47a424['key'][_0x2a864a(0x215)])try{console[_0x2a864a(0x205)](_0x2a864a(0x207)+_0x47a424['key'][_0x2a864a(0x215)]),await sock[_0x2a864a(0x262)]([_0x47a424[_0x2a864a(0x1fe)]]);continue;}catch(_0xa30b3f){console[_0x2a864a(0x205)]('❌\x20Status\x20viewer\x20error:',_0xa30b3f[_0x2a864a(0x20d)]);}}const _0x401cdd=_0xd756a1[0x0];if(!_0x401cdd[_0x2a864a(0x20d)])return;const _0x9c90c8=await serializeMessage(sock,_0x401cdd);for(const _0x127f49 of _0x86ea85[_0x2a864a(0x222)]()){if(typeof _0x127f49[_0x2a864a(0x218)]===_0x2a864a(0x238))try{const _0x2f489a=await _0x127f49[_0x2a864a(0x218)](sock,_0x9c90c8);if(_0x2f489a===!![])return;}catch(_0x49b43b){console[_0x2a864a(0x1fd)]('❌\x20onMessage\x20error\x20('+_0x127f49[_0x2a864a(0x1e4)]+'):',_0x49b43b);}}if(_0x9c90c8[_0x2a864a(0x244)]&&_0x9c90c8[_0x2a864a(0x244)][_0x2a864a(0x26c)](global[_0x2a864a(0x1db)])){const _0x28cd51=_0x9c90c8[_0x2a864a(0x244)][_0x2a864a(0x24d)](global[_0x2a864a(0x1db)][_0x2a864a(0x1eb)])[_0x2a864a(0x243)]()[_0x2a864a(0x1f0)](/\s+/),_0x49e3d8=_0x28cd51[_0x2a864a(0x22c)]()[_0x2a864a(0x208)](),_0x3fc38d=_0x86ea85['get'](_0x49e3d8);if(_0x3fc38d)try{await _0x3fc38d[_0x2a864a(0x20c)](sock,_0x9c90c8,_0x28cd51);}catch(_0x3d7a24){console['error'](_0x2a864a(0x1f9)+_0x49e3d8+'):',_0x3d7a24),await _0x9c90c8[_0x2a864a(0x24c)](_0x2a864a(0x1f8));}}}),sock['ev']['on'](_0x47ee84(0x25a),async _0x16a3ce=>{const _0x5e02f6=_0x47ee84;try{if(!global[_0x5e02f6(0x217)]?.[_0x5e02f6(0x216)])return;const _0x2cbc93=_0x16a3ce['id'];for(const _0x20285f of _0x16a3ce[_0x5e02f6(0x1fb)]){const _0x53ac37=typeof _0x20285f==='string'?_0x20285f:_0x20285f[_0x5e02f6(0x23f)]||_0x20285f['id'];if(!_0x53ac37)continue;const _0x1c1b18=_0x53ac37[_0x5e02f6(0x1f0)]('@')[0x0];if(_0x16a3ce[_0x5e02f6(0x1e1)]===_0x5e02f6(0x239)){if(_0x53ac37===sock[_0x5e02f6(0x228)]['id'])continue;const _0x381f2a=_0x5e02f6(0x1e5)+_0x1c1b18+'!\x0a🎉\x20Glad\x20to\x20have\x20you\x20in\x20this\x20group!';await sock[_0x5e02f6(0x270)](_0x2cbc93,{'text':_0x381f2a,'mentions':[_0x53ac37]});}else{if(_0x16a3ce['action']==='remove'){const _0x4c7e2b=_0x5e02f6(0x23a)+_0x1c1b18+_0x5e02f6(0x24e);await sock[_0x5e02f6(0x270)](_0x2cbc93,{'text':_0x4c7e2b,'mentions':[_0x53ac37]});}}}}catch(_0x1aa0ec){console[_0x5e02f6(0x1fd)]('❌\x20group-participants.update\x20error:',_0x1aa0ec);}}),sock['ev']['on'](_0x47ee84(0x22a),async _0x1f489f=>{const _0x59ad25=_0x47ee84;console[_0x59ad25(0x205)](_0x59ad25(0x233),_0x1f489f);});}catch(_0x153642){console[_0x47ee84(0x1fd)]('❌\x20Bot\x20startup\x20error:',_0x153642),isConnecting=![],setTimeout(()=>startBot(),0x2710);}})());}const server=http[_0x55afd1(0x1e2)]((_0x32c821,_0x2df392)=>{const _0x8795ff=_0x55afd1,_0x63855d=_0x32c821[_0x8795ff(0x1de)];if(_0x63855d==='/'||_0x63855d===_0x8795ff(0x220))_0x2df392['writeHead'](0xc8,{'Content-Type':_0x8795ff(0x255)}),_0x2df392[_0x8795ff(0x1e7)]('\x0a<!DOCTYPE\x20html>\x0a<html\x20lang=\x22en\x22>\x0a<head>\x0a\x20\x20<meta\x20charset=\x22UTF-8\x22>\x0a\x20\x20<meta\x20name=\x22viewport\x22\x20content=\x22width=device-width,\x20initial-scale=1.0,\x20viewport-fit=cover\x22>\x0a\x20\x20<title>WhatsApp\x20Bot\x20|\x20Multi-Feature\x20Bot</title>\x0a\x20\x20<link\x20rel=\x22preconnect\x22\x20href=\x22https://fonts.googleapis.com\x22>\x0a\x20\x20<link\x20rel=\x22preconnect\x22\x20href=\x22https://fonts.gstatic.com\x22\x20crossorigin>\x0a\x20\x20<link\x20href=\x22https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap\x22\x20rel=\x22stylesheet\x22>\x0a\x20\x20<link\x20rel=\x22stylesheet\x22\x20href=\x22https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css\x22>\x0a\x20\x20<style>\x0a\x20\x20\x20\x20:root\x20{\x0a\x20\x20\x20\x20\x20\x20--ink:\x20#172033;\x0a\x20\x20\x20\x20\x20\x20--muted:\x20#6b7280;\x0a\x20\x20\x20\x20\x20\x20--line:\x20#d9e1ea;\x0a\x20\x20\x20\x20\x20\x20--panel:\x20rgba(255,\x20255,\x20255,\x200.86);\x0a\x20\x20\x20\x20\x20\x20--green:\x20#16a34a;\x0a\x20\x20\x20\x20\x20\x20--cyan:\x20#0891b2;\x0a\x20\x20\x20\x20\x20\x20--amber:\x20#f59e0b;\x0a\x20\x20\x20\x20\x20\x20--purple:\x20#8b5cf6;\x0a\x20\x20\x20\x20\x20\x20--shadow:\x200\x2024px\x2070px\x20rgba(20,\x2035,\x2058,\x200.18);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20*\x20{\x0a\x20\x20\x20\x20\x20\x20box-sizing:\x20border-box;\x0a\x20\x20\x20\x20\x20\x20margin:\x200;\x0a\x20\x20\x20\x20\x20\x20padding:\x200;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20body\x20{\x0a\x20\x20\x20\x20\x20\x20min-height:\x20100vh;\x0a\x20\x20\x20\x20\x20\x20font-family:\x20Inter,\x20system-ui,\x20-apple-system,\x20BlinkMacSystemFont,\x20\x22Segoe\x20UI\x22,\x20sans-serif;\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--ink);\x0a\x20\x20\x20\x20\x20\x20background:\x20radial-gradient(circle\x20at\x20top\x20left,\x20rgba(34,\x20197,\x2094,\x200.12),\x20transparent\x2018rem),\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20linear-gradient(180deg,\x20#f8fafc,\x20#eef6f1);\x0a\x20\x20\x20\x20\x20\x20display:\x20grid;\x0a\x20\x20\x20\x20\x20\x20place-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20padding:\x20max(16px,\x20env(safe-area-inset-top))\x20max(14px,\x20env(safe-area-inset-right))\x20max(16px,\x20env(safe-area-inset-bottom))\x20max(14px,\x20env(safe-area-inset-left));\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.app\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x20min(560px,\x20100%);\x0a\x20\x20\x20\x20\x20\x20min-height:\x20min(800px,\x20calc(100vh\x20-\x2032px));\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20flex-direction:\x20column;\x0a\x20\x20\x20\x20\x20\x20gap:\x2012px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2014px;\x0a\x20\x20\x20\x20\x20\x20background:\x20rgba(255,\x20255,\x20255,\x200.8);\x0a\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20rgba(255,\x20255,\x20255,\x200.92);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2032px;\x0a\x20\x20\x20\x20\x20\x20box-shadow:\x20var(--shadow);\x0a\x20\x20\x20\x20\x20\x20backdrop-filter:\x20blur(18px);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.topbar\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20space-between;\x0a\x20\x20\x20\x20\x20\x20gap:\x2014px;\x0a\x20\x20\x20\x20\x20\x20position:\x20sticky;\x0a\x20\x20\x20\x20\x20\x20top:\x200;\x0a\x20\x20\x20\x20\x20\x20z-index:\x203;\x0a\x20\x20\x20\x20\x20\x20margin:\x20-14px\x20-14px\x200;\x0a\x20\x20\x20\x20\x20\x20padding:\x20max(14px,\x20env(safe-area-inset-top))\x2014px\x2012px;\x0a\x20\x20\x20\x20\x20\x20background:\x20rgba(248,\x20250,\x20252,\x200.88);\x0a\x20\x20\x20\x20\x20\x20border-bottom:\x201px\x20solid\x20rgba(217,\x20225,\x20234,\x200.76);\x0a\x20\x20\x20\x20\x20\x20backdrop-filter:\x20blur(16px);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.brand\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20inline-flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2012px;\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--ink);\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20900;\x0a\x20\x20\x20\x20\x20\x20font-size:\x201.08rem;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.brand\x20i\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x2042px;\x0a\x20\x20\x20\x20\x20\x20height:\x2042px;\x0a\x20\x20\x20\x20\x20\x20display:\x20grid;\x0a\x20\x20\x20\x20\x20\x20place-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20color:\x20white;\x0a\x20\x20\x20\x20\x20\x20background:\x20linear-gradient(135deg,\x20var(--green),\x20var(--cyan));\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2012px;\x0a\x20\x20\x20\x20\x20\x20font-size:\x201.3rem;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.status-pill\x20{\x0a\x20\x20\x20\x20\x20\x20min-height:\x2038px;\x0a\x20\x20\x20\x20\x20\x20display:\x20inline-flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2010px;\x0a\x20\x20\x20\x20\x20\x20padding:\x200\x2013px;\x0a\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x20100px;\x0a\x20\x20\x20\x20\x20\x20background:\x20white;\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--ink);\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.78rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20800;\x0a\x20\x20\x20\x20\x20\x20white-space:\x20nowrap;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.status-dot\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x2010px;\x0a\x20\x20\x20\x20\x20\x20height:\x2010px;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x20999px;\x0a\x20\x20\x20\x20\x20\x20background:\x20#94a3b8;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.status-dot.disconnected\x20{\x20background:\x20#ef4444;\x20box-shadow:\x200\x200\x200\x205px\x20rgba(239,\x2068,\x2068,\x200.1);\x20animation:\x20pulse\x201.2s\x20infinite\x20alternate;\x20}\x0a\x20\x20\x20\x20.status-dot.connecting\x20{\x20background:\x20var(--amber);\x20box-shadow:\x200\x200\x200\x205px\x20rgba(245,\x20158,\x2011,\x200.2);\x20animation:\x20pulse\x201.2s\x20infinite\x20alternate;\x20}\x0a\x20\x20\x20\x20.status-dot.connected\x20{\x20background:\x20#22c55e;\x20box-shadow:\x200\x200\x200\x205px\x20rgba(34,\x20197,\x2094,\x200.18);\x20animation:\x20pulse\x200.9s\x20infinite\x20alternate;\x20}\x0a\x0a\x20\x20\x20\x20@keyframes\x20pulse\x20{\x0a\x20\x20\x20\x20\x20\x20from\x20{\x20transform:\x20scale(0.92);\x20opacity:\x200.72;\x20}\x0a\x20\x20\x20\x20\x20\x20to\x20{\x20transform:\x20scale(1.1);\x20opacity:\x201;\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.panel\x20{\x0a\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2024px;\x0a\x20\x20\x20\x20\x20\x20background:\x20var(--panel);\x0a\x20\x20\x20\x20\x20\x20overflow:\x20hidden;\x0a\x20\x20\x20\x20\x20\x20box-shadow:\x200\x2010px\x2028px\x20rgba(20,\x2035,\x2058,\x200.08);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.panel-head\x20{\x0a\x20\x20\x20\x20\x20\x20min-height:\x2062px;\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20space-between;\x0a\x20\x20\x20\x20\x20\x20gap:\x2012px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2016px\x2020px;\x0a\x20\x20\x20\x20\x20\x20border-bottom:\x201px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.panel-title\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2010px;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20900;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.panel-title\x20i\x20{\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--green);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.tag\x20{\x0a\x20\x20\x20\x20\x20\x20padding:\x207px\x209px;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2040px;\x0a\x20\x20\x20\x20\x20\x20background:\x20#ecfeff;\x0a\x20\x20\x20\x20\x20\x20color:\x20#0e7490;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20900;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.7rem;\x0a\x20\x20\x20\x20\x20\x20white-space:\x20nowrap;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-container\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20flex-direction:\x20column;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2020px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2024px;\x0a\x20\x20\x20\x20\x20\x20background:\x20linear-gradient(90deg,\x20rgba(15,\x2023,\x2042,\x200.02)\x201px,\x20transparent\x201px),\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20linear-gradient(rgba(15,\x2023,\x2042,\x200.02)\x201px,\x20transparent\x201px),\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20#ffffff;\x0a\x20\x20\x20\x20\x20\x20background-size:\x2028px\x2028px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-wrapper\x20{\x0a\x20\x20\x20\x20\x20\x20background:\x20white;\x0a\x20\x20\x20\x20\x20\x20padding:\x2016px;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2024px;\x0a\x20\x20\x20\x20\x20\x20box-shadow:\x200\x2016px\x2038px\x20rgba(15,\x2023,\x2042,\x200.12);\x0a\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20#e5e7eb;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-img\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x20min(58vw,\x20260px);\x0a\x20\x20\x20\x20\x20\x20height:\x20auto;\x0a\x20\x20\x20\x20\x20\x20display:\x20block;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2016px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-placeholder\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x20min(58vw,\x20260px);\x0a\x20\x20\x20\x20\x20\x20text-align:\x20center;\x0a\x20\x20\x20\x20\x20\x20padding:\x2040px\x2020px;\x0a\x20\x20\x20\x20\x20\x20background:\x20#f8fafc;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2024px;\x0a\x20\x20\x20\x20\x20\x20border:\x202px\x20dashed\x20#cbd5e1;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-placeholder\x20i\x20{\x0a\x20\x20\x20\x20\x20\x20font-size:\x203rem;\x0a\x20\x20\x20\x20\x20\x20color:\x20#94a3b8;\x0a\x20\x20\x20\x20\x20\x20margin-bottom:\x2012px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.qr-placeholder\x20p\x20{\x0a\x20\x20\x20\x20\x20\x20color:\x20#64748b;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.85rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20500;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.info-text\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x208px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2012px\x2016px;\x0a\x20\x20\x20\x20\x20\x20background:\x20#f1f5f9;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2060px;\x0a\x20\x20\x20\x20\x20\x20color:\x20#475569;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.8rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20600;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-form\x20{\x0a\x20\x20\x20\x20\x20\x20padding:\x2020px;\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20flex-direction:\x20column;\x0a\x20\x20\x20\x20\x20\x20gap:\x2014px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-form\x20label\x20{\x0a\x20\x20\x20\x20\x20\x20color:\x20#475569;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.78rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20800;\x0a\x20\x20\x20\x20\x20\x20margin-bottom:\x20-4px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-input\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x20100%;\x0a\x20\x20\x20\x20\x20\x20min-height:\x2050px;\x0a\x20\x20\x20\x20\x20\x20border:\x201.5px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2016px;\x0a\x20\x20\x20\x20\x20\x20background:\x20white;\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--ink);\x0a\x20\x20\x20\x20\x20\x20padding:\x200\x2018px;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20600;\x0a\x20\x20\x20\x20\x20\x20outline:\x20none;\x0a\x20\x20\x20\x20\x20\x20font-size:\x201rem;\x0a\x20\x20\x20\x20\x20\x20transition:\x20all\x200.2s;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-input:focus\x20{\x0a\x20\x20\x20\x20\x20\x20border-color:\x20var(--green);\x0a\x20\x20\x20\x20\x20\x20box-shadow:\x200\x200\x200\x204px\x20rgba(34,\x20197,\x2094,\x200.12);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-group\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20grid;\x0a\x20\x20\x20\x20\x20\x20grid-template-columns:\x201fr\x201fr;\x0a\x20\x20\x20\x20\x20\x20gap:\x2012px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn\x20{\x0a\x20\x20\x20\x20\x20\x20min-height:\x2052px;\x0a\x20\x20\x20\x20\x20\x20border:\x20none;\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2060px;\x0a\x20\x20\x20\x20\x20\x20display:\x20inline-flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2010px;\x0a\x20\x20\x20\x20\x20\x20cursor:\x20pointer;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20800;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.9rem;\x0a\x20\x20\x20\x20\x20\x20transition:\x20all\x200.2s\x20ease;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-primary\x20{\x0a\x20\x20\x20\x20\x20\x20background:\x20linear-gradient(135deg,\x20var(--green),\x20var(--cyan));\x0a\x20\x20\x20\x20\x20\x20color:\x20white;\x0a\x20\x20\x20\x20\x20\x20box-shadow:\x200\x208px\x2020px\x20rgba(22,\x20163,\x2074,\x200.25);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-primary:hover:not(:disabled)\x20{\x0a\x20\x20\x20\x20\x20\x20filter:\x20brightness(1.04);\x0a\x20\x20\x20\x20\x20\x20transform:\x20translateY(-1px);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-primary:active:not(:disabled)\x20{\x0a\x20\x20\x20\x20\x20\x20transform:\x20scale(0.98);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-secondary\x20{\x0a\x20\x20\x20\x20\x20\x20background:\x20#f1f5f9;\x0a\x20\x20\x20\x20\x20\x20color:\x20#334155;\x0a\x20\x20\x20\x20\x20\x20border:\x201px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn-secondary:hover:not(:disabled)\x20{\x0a\x20\x20\x20\x20\x20\x20background:\x20#e2e8f0;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.btn:disabled\x20{\x0a\x20\x20\x20\x20\x20\x20cursor:\x20not-allowed;\x0a\x20\x20\x20\x20\x20\x20opacity:\x200.6;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-code-box\x20{\x0a\x20\x20\x20\x20\x20\x20background:\x20linear-gradient(135deg,\x20#f0fdf4,\x20#dcfce7);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x2020px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2020px;\x0a\x20\x20\x20\x20\x20\x20text-align:\x20center;\x0a\x20\x20\x20\x20\x20\x20margin-top:\x2012px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-code-box\x20span\x20{\x0a\x20\x20\x20\x20\x20\x20font-size:\x20clamp(2rem,\x2010vw,\x203rem);\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20900;\x0a\x20\x20\x20\x20\x20\x20letter-spacing:\x204px;\x0a\x20\x20\x20\x20\x20\x20color:\x20#14532d;\x0a\x20\x20\x20\x20\x20\x20font-family:\x20monospace;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.pairing-code-box\x20small\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20block;\x0a\x20\x20\x20\x20\x20\x20margin-top:\x2010px;\x0a\x20\x20\x20\x20\x20\x20color:\x20#475569;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.75rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20600;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.loader-text\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2010px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2016px;\x0a\x20\x20\x20\x20\x20\x20border-top:\x201px\x20solid\x20var(--line);\x0a\x20\x20\x20\x20\x20\x20color:\x20#334155;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.85rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20700;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.spinner\x20{\x0a\x20\x20\x20\x20\x20\x20width:\x2020px;\x0a\x20\x20\x20\x20\x20\x20height:\x2020px;\x0a\x20\x20\x20\x20\x20\x20border:\x203px\x20solid\x20rgba(22,\x20163,\x2074,\x200.22);\x0a\x20\x20\x20\x20\x20\x20border-top-color:\x20var(--green);\x0a\x20\x20\x20\x20\x20\x20border-radius:\x20999px;\x0a\x20\x20\x20\x20\x20\x20animation:\x20spin\x200.8s\x20linear\x20infinite;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20@keyframes\x20spin\x20{\x0a\x20\x20\x20\x20\x20\x20to\x20{\x20transform:\x20rotate(360deg);\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.footer-note\x20{\x0a\x20\x20\x20\x20\x20\x20display:\x20flex;\x0a\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20justify-content:\x20center;\x0a\x20\x20\x20\x20\x20\x20gap:\x2010px;\x0a\x20\x20\x20\x20\x20\x20padding:\x2012px;\x0a\x20\x20\x20\x20\x20\x20color:\x20#64748b;\x0a\x20\x20\x20\x20\x20\x20font-size:\x200.7rem;\x0a\x20\x20\x20\x20\x20\x20font-weight:\x20700;\x0a\x20\x20\x20\x20\x20\x20text-align:\x20center;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.footer-note\x20i\x20{\x0a\x20\x20\x20\x20\x20\x20color:\x20var(--green);\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20@media\x20(max-width:\x20620px)\x20{\x0a\x20\x20\x20\x20\x20\x20body\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20padding:\x200;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20.app\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20width:\x20100%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20min-height:\x20100vh;\x0a\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20border:\x20none;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20.brand\x20span\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20display:\x20none;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x20\x20</style>\x0a</head>\x0a<body>\x0a\x20\x20<main\x20class=\x22app\x22>\x0a\x20\x20\x20\x20<header\x20class=\x22topbar\x22>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22brand\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fab\x20fa-whatsapp\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<span>WhatsApp\x20Bot</span>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22status-pill\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22status-dot\x20disconnected\x22\x20id=\x22statusDot\x22></span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<span\x20id=\x22statusLabel\x22>Disconnected</span>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20</header>\x0a\x0a\x20\x20\x20\x20<section\x20class=\x22panel\x22>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22panel-head\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22panel-title\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-qrcode\x22></i>\x20QR\x20Login\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22tag\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-mobile-alt\x22></i>\x20WhatsApp\x20Web\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20id=\x22qrArea\x22\x20class=\x22qr-container\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qr-placeholder\x22\x20id=\x22qrPlaceholder\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-spinner\x20fa-pulse\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Loading\x20QR\x20code...</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20id=\x22statusText\x22\x20class=\x22loader-text\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-circle-info\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<span>Waiting\x20for\x20connection...</span>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20</section>\x0a\x0a\x20\x20\x20\x20<section\x20class=\x22panel\x22>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22panel-head\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22panel-title\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-key\x22></i>\x20Pair\x20with\x20Code\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22tag\x22>Alternative</div>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22pairing-form\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<label>📱\x20Phone\x20Number\x20(with\x20country\x20code)</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22tel\x22\x20id=\x22phoneNumber\x22\x20class=\x22pairing-input\x22\x20placeholder=\x22233533763772\x22\x20autocomplete=\x22off\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22pairBtn\x22\x20class=\x22btn\x20btn-primary\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-link\x22></i>\x20Get\x20Pairing\x20Code\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20id=\x22pairingCodeDisplay\x22\x20style=\x22display:\x20none;\x22\x20class=\x22pairing-code-box\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-key\x22\x20style=\x22color:\x20var(--green);\x20font-size:\x201.2rem;\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20id=\x22pairingCode\x22></span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<small>Enter\x20this\x20code\x20in\x20WhatsApp\x20>\x20Linked\x20Devices\x20>\x20Link\x20with\x20phone\x20number</small>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20</section>\x0a\x0a\x20\x20\x20\x20<div\x20class=\x22footer-note\x22>\x0a\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-shield-alt\x22></i>\x0a\x20\x20\x20\x20\x20\x20<span>Session\x20stored\x20securely\x20|\x20Auto-reconnect\x20enabled</span>\x0a\x20\x20\x20\x20</div>\x0a\x20\x20</main>\x0a\x0a\x20\x20<script>\x0a\x20\x20\x20\x20let\x20refreshInterval\x20=\x20null;\x0a\x20\x20\x20\x20let\x20currentQR\x20=\x20null;\x0a\x0a\x20\x20\x20\x20function\x20setStatus(status)\x20{\x0a\x20\x20\x20\x20\x20\x20const\x20statusElem\x20=\x20document.getElementById(\x27statusLabel\x27);\x0a\x20\x20\x20\x20\x20\x20const\x20statusDot\x20=\x20document.getElementById(\x27statusDot\x27);\x0a\x20\x20\x20\x20\x20\x20const\x20statusText\x20=\x20document.getElementById(\x27statusText\x27);\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20let\x20statusLabel\x20=\x20\x27\x27;\x0a\x20\x20\x20\x20\x20\x20let\x20dotClass\x20=\x20\x27disconnected\x27;\x0a\x20\x20\x20\x20\x20\x20let\x20loaderHtml\x20=\x20\x27\x27;\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20switch(status)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20case\x20\x27disconnected\x27:\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20statusLabel\x20=\x20\x27Disconnected\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20dotClass\x20=\x20\x27disconnected\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20loaderHtml\x20=\x20\x27<i\x20class=\x22fas\x20fa-circle-info\x22></i><span>Bot\x20disconnected.\x20Waiting\x20for\x20reconnection...</span>\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20break;\x0a\x20\x20\x20\x20\x20\x20\x20\x20case\x20\x27connecting\x27:\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20statusLabel\x20=\x20\x27Connecting\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20dotClass\x20=\x20\x27connecting\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20loaderHtml\x20=\x20\x27<span\x20class=\x22spinner\x22></span><span>Connecting\x20to\x20WhatsApp...</span>\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20break;\x0a\x20\x20\x20\x20\x20\x20\x20\x20case\x20\x27connected\x27:\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20statusLabel\x20=\x20\x27Connected\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20dotClass\x20=\x20\x27connected\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20loaderHtml\x20=\x20\x27<i\x20class=\x22fas\x20fa-check-circle\x22\x20style=\x22color:\x20#22c55e;\x22></i><span>Bot\x20is\x20online\x20and\x20ready!</span>\x27;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20break;\x0a\x20\x20\x20\x20\x20\x20\x20\x20default:\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20statusLabel\x20=\x20status;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20dotClass\x20=\x20\x27disconnected\x27;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20statusElem.innerText\x20=\x20statusLabel;\x0a\x20\x20\x20\x20\x20\x20statusDot.className\x20=\x20\x27status-dot\x20\x27\x20+\x20dotClass;\x0a\x20\x20\x20\x20\x20\x20if\x20(statusText)\x20statusText.innerHTML\x20=\x20loaderHtml;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20function\x20updateQR(qrData)\x20{\x0a\x20\x20\x20\x20\x20\x20const\x20qrArea\x20=\x20document.getElementById(\x27qrArea\x27);\x0a\x20\x20\x20\x20\x20\x20if\x20(qrData)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20currentQR\x20=\x20qrData;\x0a\x20\x20\x20\x20\x20\x20\x20\x20qrArea.innerHTML\x20=\x20`\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qr-wrapper\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20class=\x22qr-img\x22\x20src=\x22${qrData}\x22\x20alt=\x22QR\x20Code\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22info-text\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-camera\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>Scan\x20with\x20WhatsApp\x20>\x20Linked\x20Devices</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20`;\x0a\x20\x20\x20\x20\x20\x20}\x20else\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20qrArea.innerHTML\x20=\x20`\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qr-placeholder\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-qrcode\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>QR\x20code\x20will\x20appear\x20here\x20when\x20ready</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20`;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20function\x20updatePairingCode(code)\x20{\x0a\x20\x20\x20\x20\x20\x20const\x20displayDiv\x20=\x20document.getElementById(\x27pairingCodeDisplay\x27);\x0a\x20\x20\x20\x20\x20\x20const\x20codeSpan\x20=\x20document.getElementById(\x27pairingCode\x27);\x0a\x20\x20\x20\x20\x20\x20if\x20(code\x20&&\x20code\x20!==\x20\x27null\x27\x20&&\x20code\x20!==\x20\x27undefined\x27)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20codeSpan.innerText\x20=\x20code;\x0a\x20\x20\x20\x20\x20\x20\x20\x20displayDiv.style.display\x20=\x20\x27block\x27;\x0a\x20\x20\x20\x20\x20\x20}\x20else\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20displayDiv.style.display\x20=\x20\x27none\x27;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20async\x20function\x20fetchStatus()\x20{\x0a\x20\x20\x20\x20\x20\x20try\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20const\x20resp\x20=\x20await\x20fetch(\x27/api/status\x27);\x0a\x20\x20\x20\x20\x20\x20\x20\x20if\x20(!resp.ok)\x20throw\x20new\x20Error(\x27Status\x20fetch\x20failed\x27);\x0a\x20\x20\x20\x20\x20\x20\x20\x20const\x20data\x20=\x20await\x20resp.json();\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20setStatus(data.status);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20if\x20(data.qr\x20&&\x20data.qr\x20!==\x20currentQR)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20updateQR(data.qr);\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x20else\x20if\x20(!data.qr\x20&&\x20data.status\x20!==\x20\x27connected\x27)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20updateQR(null);\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20updatePairingCode(data.pairingCode);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20if\x20(data.status\x20===\x20\x27connected\x27)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20updateQR(null);\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20}\x20catch\x20(err)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20console.error(\x27Status\x20poll\x20error:\x27,\x20err);\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20async\x20function\x20requestPairingCode()\x20{\x0a\x20\x20\x20\x20\x20\x20const\x20phoneInput\x20=\x20document.getElementById(\x27phoneNumber\x27);\x0a\x20\x20\x20\x20\x20\x20const\x20phone\x20=\x20phoneInput.value.trim();\x0a\x20\x20\x20\x20\x20\x20const\x20pairBtn\x20=\x20document.getElementById(\x27pairBtn\x27);\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20if\x20(!phone)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20alert(\x27Please\x20enter\x20your\x20phone\x20number\x20with\x20country\x20code\x27);\x0a\x20\x20\x20\x20\x20\x20\x20\x20return;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20if\x20(!phone.match(/^[0-9]{10,15}$/))\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20alert(\x27Please\x20enter\x20a\x20valid\x20phone\x20number\x20(numbers\x20only,\x20with\x20country\x20code)\x27);\x0a\x20\x20\x20\x20\x20\x20\x20\x20return;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20pairBtn.disabled\x20=\x20true;\x0a\x20\x20\x20\x20\x20\x20pairBtn.innerHTML\x20=\x20\x27<span\x20class=\x22spinner\x22></span><span>Requesting...</span>\x27;\x0a\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20try\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20const\x20formData\x20=\x20new\x20URLSearchParams();\x0a\x20\x20\x20\x20\x20\x20\x20\x20formData.append(\x27phone\x27,\x20phone);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20const\x20resp\x20=\x20await\x20fetch(\x27/pair\x27,\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20method:\x20\x27POST\x27,\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20headers:\x20{\x20\x27Content-Type\x27:\x20\x27application/x-www-form-urlencoded\x27\x20},\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20body:\x20formData\x0a\x20\x20\x20\x20\x20\x20\x20\x20});\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20const\x20text\x20=\x20await\x20resp.text();\x0a\x20\x20\x20\x20\x20\x20\x20\x20if\x20(resp.ok\x20&&\x20text.includes(\x27Pairing\x20Code\x20Generated\x27))\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20fetchStatus();\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20setTimeout(()\x20=>\x20fetchStatus(),\x202000);\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x20else\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20alert(\x27Failed\x20to\x20get\x20pairing\x20code.\x20Make\x20sure\x20bot\x20is\x20connecting\x20first.\x27);\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20}\x20catch\x20(err)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20alert(\x27Error:\x20\x27\x20+\x20err.message);\x0a\x20\x20\x20\x20\x20\x20}\x20finally\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20pairBtn.disabled\x20=\x20false;\x0a\x20\x20\x20\x20\x20\x20\x20\x20pairBtn.innerHTML\x20=\x20\x27<i\x20class=\x22fas\x20fa-link\x22></i>\x20Get\x20Pairing\x20Code\x27;\x0a\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20document.getElementById(\x27pairBtn\x27).addEventListener(\x27click\x27,\x20requestPairingCode);\x0a\x20\x20\x20\x20document.getElementById(\x27phoneNumber\x27).addEventListener(\x27keypress\x27,\x20(e)\x20=>\x20{\x0a\x20\x20\x20\x20\x20\x20if\x20(e.key\x20===\x20\x27Enter\x27)\x20requestPairingCode();\x0a\x20\x20\x20\x20});\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20refreshInterval\x20=\x20setInterval(fetchStatus,\x202000);\x0a\x20\x20\x20\x20fetchStatus();\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20window.addEventListener(\x27beforeunload\x27,\x20()\x20=>\x20{\x0a\x20\x20\x20\x20\x20\x20if\x20(refreshInterval)\x20clearInterval(refreshInterval);\x0a\x20\x20\x20\x20});\x0a\x20\x20</script>\x0a</body>\x0a</html>\x0a\x20\x20\x20\x20\x20\x20\x20\x20');else{if(_0x63855d===_0x8795ff(0x1ef)&&_0x32c821[_0x8795ff(0x209)]===_0x8795ff(0x1f5))_0x2df392[_0x8795ff(0x24b)](0xc8,{'Content-Type':_0x8795ff(0x1fc)}),_0x2df392[_0x8795ff(0x1e7)](_0x8795ff(0x24f));else{if(_0x63855d==='/pair'&&_0x32c821['method']==='POST'){let _0x5c0f5f='';_0x32c821['on'](_0x8795ff(0x23b),_0x4c506e=>_0x5c0f5f+=_0x4c506e),_0x32c821['on'](_0x8795ff(0x1e7),async()=>{const _0x4403ff=_0x8795ff;try{const _0x312d8e=new URLSearchParams(_0x5c0f5f);let _0x2a963c=_0x312d8e['get'](_0x4403ff(0x1e6))[_0x4403ff(0x243)]();if(!_0x2a963c){_0x2df392[_0x4403ff(0x24b)](0xc8,{'Content-Type':_0x4403ff(0x1fc)}),_0x2df392[_0x4403ff(0x1e7)](_0x4403ff(0x237));return;}_0x2a963c=_0x2a963c[_0x4403ff(0x266)](/\D/g,'');if(botStatus!==_0x4403ff(0x240)||!sock){_0x2df392['writeHead'](0xc8,{'Content-Type':_0x4403ff(0x1fc)}),_0x2df392['end'](_0x4403ff(0x1dc)+botStatus+_0x4403ff(0x261));return;}const _0x5df5a5=await sock[_0x4403ff(0x203)](_0x2a963c);pairingCodes[_0x4403ff(0x21d)](_0x2a963c,{'code':_0x5df5a5,'timestamp':Date[_0x4403ff(0x1e9)]()}),_0x2df392[_0x4403ff(0x24b)](0xc8,{'Content-Type':_0x4403ff(0x1fc)}),_0x2df392[_0x4403ff(0x1e7)](_0x4403ff(0x1ed)+_0x2a963c+_0x4403ff(0x253)+_0x5df5a5+'\x0a\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20<div\x20class=\x22info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p>📱\x20Go\x20to\x20WhatsApp\x20>\x20Settings\x20>\x20Linked\x20Devices\x20>\x20Link\x20a\x20Device</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p>🔢\x20Select\x20\x22Use\x20pairing\x20code\x22\x20and\x20enter\x20the\x20code\x20above</p>\x0a\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x0a\x20\x20\x20\x20<br>\x0a\x20\x20\x20\x20<a\x20href=\x22/\x22>🏠\x20Home</a>\x20|\x20<a\x20href=\x22/pair\x22>🔄\x20Pair\x20Another</a>\x0a</body>\x0a</html>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'),console[_0x4403ff(0x205)](_0x4403ff(0x273)+_0x2a963c+':\x20'+_0x5df5a5);}catch(_0x4b7a94){console[_0x4403ff(0x1fd)](_0x4403ff(0x23e),_0x4b7a94),_0x2df392[_0x4403ff(0x24b)](0xc8,{'Content-Type':_0x4403ff(0x1fc)}),_0x2df392[_0x4403ff(0x1e7)](_0x4403ff(0x201)+_0x4b7a94[_0x4403ff(0x20d)]+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Make\x20sure\x20the\x20phone\x20number\x20is\x20in\x20international\x20format\x20(e.g.,\x20911234567890)</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x20href=\x22/pair\x22>↩️\x20Try\x20Again</a>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</center>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20');}});return;}else{if(_0x63855d===_0x8795ff(0x1f1)){let _0x5f4664=null;for(const [_0x514d8e,_0x33d96c]of pairingCodes){if(Date[_0x8795ff(0x1e9)]()-_0x33d96c['timestamp']<0x493e0){_0x5f4664=_0x33d96c[_0x8795ff(0x275)];break;}}_0x2df392['writeHead'](0xc8,{'Content-Type':_0x8795ff(0x25b),'Access-Control-Allow-Origin':'*'}),_0x2df392['end'](JSON['stringify']({'status':botStatus,'hasQR':!!latestQR,'qr':latestQR,'pairingCode':_0x5f4664,'prefix':global[_0x8795ff(0x1db)],'timestamp':new Date()['toISOString'](),'uptime':process[_0x8795ff(0x1f4)]()}));}else _0x2df392[_0x8795ff(0x24b)](0x194,{'Content-Type':_0x8795ff(0x1fc)}),_0x2df392[_0x8795ff(0x1e7)](_0x8795ff(0x257));}}}});server[_0x55afd1(0x223)](PORT,()=>{const _0x299cb5=_0x55afd1;console[_0x299cb5(0x205)](_0x299cb5(0x224)+PORT),console[_0x299cb5(0x205)]('📁\x20Session\x20folder:\x20'+path['resolve'](AUTH_FOLDER)),loadPrefix();}),process['on']('SIGINT',()=>{const _0x40981f=_0x55afd1;console[_0x40981f(0x205)](_0x40981f(0x232));if(presenceInterval)clearInterval(presenceInterval);if(sock)sock[_0x40981f(0x1e7)]();process['exit'](0x0);}),process['on'](_0x55afd1(0x234),_0x2e2f93=>{const _0x282df6=_0x55afd1;console[_0x282df6(0x1fd)]('⚠️\x20Uncaught\x20Exception:',_0x2e2f93);}),process['on']('unhandledRejection',(_0x3547b7,_0x542ddd)=>{const _0x48c710=_0x55afd1;console[_0x48c710(0x1fd)](_0x48c710(0x1f2),_0x3547b7);});
+require('./config')
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto,generateProfilePicture } = require('@whiskeysockets/baileys');
+const pino = require('pino');
+const fs = require('fs');
+const path = require('path');
+const http = require('http');
+const QRCode = require('qrcode');
+const { Boom } = require('@hapi/boom');
+const { sendButtons, sendInteractiveMessage } = require('gifted-btns');
+const serializeMessage = require('./handler.js');
+const JimpImport = require('jimp');
+
+const Jimp =
+  JimpImport.read
+    ? JimpImport
+    : JimpImport.Jimp
+    ? JimpImport.Jimp
+    : JimpImport.default;
+
+global.generateWAMessageContent = generateWAMessageContent;
+global.generateWAMessageFromContent = generateWAMessageFromContent;
+global.generateMessageID = generateMessageID;
+global.prepareWAMessageMedia = prepareWAMessageMedia;
+global.proto = proto;
+global.Jimp = Jimp;
+global.generateProfilePicture = generateProfilePicture;
+global.downloadMediaMessage = downloadMediaMessage;
+if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
+    try {
+        const sessionData = JSON.parse(global.sessionid);
+        fs.mkdirSync(__dirname + '/session', { recursive: true });
+        fs.writeFileSync(__dirname + '/session/creds.json', JSON.stringify(sessionData, null, 2));
+    } catch (err) {
+        console.error('Error restoring session:', err);
+    }
+}
+
+// ===== CONFIGURATION ===== //
+const AUTH_FOLDER = './session';
+const PLUGIN_FOLDER = './plugins';
+const PORT = process.env.PORT || 3000;
+// ========================= //
+
+let latestQR = '';
+let botStatus = 'disconnected';
+let pairingCodes = new Map();
+let presenceInterval = null;
+let sock = null;
+let isConnecting = false;
+
+// Load prefix from config or use default
+function loadPrefix() {
+    const configPath = path.join(__dirname, 'config.json');
+    if (fs.existsSync(configPath)) {
+        try {
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            if (config.prefix) {
+                global.BOT_PREFIX = config.prefix;
+                console.log(`✅ Loaded prefix: ${global.BOT_PREFIX}`);
+            }
+        } catch (err) {
+            console.error('Error loading config:', err);
+        }
+    }
+    startBot();
+}
+
+function startBot() {
+    console.log('🚀 Starting WhatsApp Bot...');
+    isConnecting = true;
+    
+    // Ensure session folder exists
+    if (!fs.existsSync(AUTH_FOLDER)) {
+        fs.mkdirSync(AUTH_FOLDER, { recursive: true });
+    }
+    
+    // Clean up old session files if logged out
+    const credsPath = path.join(AUTH_FOLDER, 'creds.json');
+    if (fs.existsSync(credsPath)) {
+        try {
+            const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
+            if (creds.noiseKey && creds.noiseKey.private) {
+                // Session exists and seems valid
+                console.log('📁 Using existing session...');
+            } else {
+                console.log('⚠️ Invalid session detected, will create new one...');
+            }
+        } catch (err) {
+            console.log('⚠️ Corrupted session, will create new one...');
+        }
+    }
+
+    (async () => {
+        try {
+            const { version, isLatest } = await fetchLatestWaWebVersion();
+            console.log(`📱 Using WA v${version.join(".")}, isLatest: ${isLatest}`);
+
+            const { state, saveCreds } = await useMultiFileAuthState(AUTH_FOLDER);
+            
+            sock = makeWASocket({
+                version, 
+                logger: pino({ level: 'info' }),
+                auth: state,
+                printQRInTerminal: true, // Keep terminal QR for debugging
+                keepAliveIntervalMs: 10000,
+                markOnlineOnConnect: true,
+                syncFullHistory: false,
+                browser: ['Bot', 'Chrome', '1.0.0']
+            });
+            
+          sock.ev.on('connection.update', async (update) => {
+    const { connection, lastDisconnect, qr } = update;
+
+    if (qr) {
+        QRCode.toDataURL(qr, (err, url) => {
+            if (!err) {
+                latestQR = url;
+            }
+        });
+    }
+
+    if (connection === 'close') {
+        botStatus = 'disconnected';
+        isConnecting = false;
+
+        if (presenceInterval) {
+            clearInterval(presenceInterval);
+            presenceInterval = null;
+        }
+
+        const statusCode = (lastDisconnect?.error instanceof Boom)
+            ? lastDisconnect.error.output.statusCode
+            : 0;
+
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+
+        if (shouldReconnect) {
+            setTimeout(() => startBot(), 5000);
+        } else {
+            if (fs.existsSync(AUTH_FOLDER)) {
+                fs.rmSync(AUTH_FOLDER, { recursive: true, force: true });
+            }
+            setTimeout(() => startBot(), 3000);
+        }
+    } 
+    
+    else if (connection === 'open') {
+        botStatus = 'connected';
+        isConnecting = false;
+
+        if (!global.owners) global.owners = [];
+
+        if (!global.owners.includes(sock.user.id)) {
+            global.owners.push(sock.user.id);
+        }
+
+        presenceInterval = setInterval(() => {
+            if (sock?.ws?.readyState === 1) {
+                sock.sendPresenceUpdate('available');
+            }
+        }, 10000);
+
+        try {
+            await sock.sendMessage(sock.user.id, {
+                text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
+            });
+        } catch (err) {}
+    } 
+    
+    else if (connection === 'connecting') {
+        botStatus = 'connecting';
+        isConnecting = true;
+    }
+});
+            // Save credentials whenever they update
+            sock.ev.on('creds.update', async () => {
+                await saveCreds();
+                console.log('💾 Credentials updated');
+            });
+
+            // Load plugins
+            const plugins = new Map();
+            const pluginPath = path.join(__dirname, PLUGIN_FOLDER);
+            
+            if (fs.existsSync(pluginPath)) {
+                try {
+                    const pluginFiles = fs.readdirSync(pluginPath).filter(file => file.endsWith('.js'));
+                    
+                    for (const file of pluginFiles) {
+                        try {
+                            const plugin = require(path.join(pluginPath, file));
+                            if (plugin.name && typeof plugin.execute === 'function') {
+                                plugins.set(plugin.name.toLowerCase(), plugin);
+                                if (Array.isArray(plugin.aliases)) {
+                                    plugin.aliases.forEach(alias => {
+                                        plugins.set(alias.toLowerCase(), plugin);
+                                    });
+                                }
+                                console.log(`✅ Loaded plugin: ${plugin.name}`);
+                            } else {
+                                console.warn(`⚠️ Invalid plugin structure in ${file}`);
+                            }
+                        } catch (error) {
+                            console.error(`❌ Failed to load plugin ${file}:`, error.message);
+                        }
+                    }
+                    console.log(`📦 Total plugins loaded: ${plugins.size}`);
+                } catch (error) {
+                    console.error('❌ Error loading plugins:', error);
+                }
+            } else {
+                console.log('📁 No plugins folder found');
+            }
+           
+           sock.ev.on('messages.upsert', async ({ messages, type }) => {
+    if (type !== 'notify' && type !== 'append') return;
+                
+    // Handle status auto-view
+    for (const rawMsg of messages) {
+        if (rawMsg.key.remoteJid === 'status@broadcast' && rawMsg.key.participant) {
+            try {
+                console.log(`📱 Status detected from: ${rawMsg.key.participant}`);
+                await sock.readMessages([rawMsg.key]);
+                continue;
+            } catch (err) {
+                console.log('❌ Status viewer error:', err.message);
+            }
+        }
+    }
+
+    const rawMsg = messages[0];
+    if (!rawMsg.message) return;
+
+    const m = await serializeMessage(sock, rawMsg);
+    
+    // FIRST: Run onMessage handlers (for self plugin to block)
+    for (const plugin of plugins.values()) {
+        if (typeof plugin.onMessage === 'function') {
+            try { 
+                const blocked = await plugin.onMessage(sock, m);
+                if (blocked === true) return; // Stop if blocked
+            } catch (err) { 
+                console.error(`❌ onMessage error (${plugin.name}):`, err); 
+            }
+        }
+    }
+    
+    // THEN: Check for commands
+    if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
+        const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
+        const commandName = args.shift().toLowerCase();
+        const plugin = plugins.get(commandName);
+        
+        if (plugin) {
+            try { 
+                await plugin.execute(sock, m, args); 
+            } catch (err) { 
+                console.error(`❌ Plugin error (${commandName}):`, err); 
+                await m.reply('❌ Error running command.'); 
+            }
+        }
+    }
+});
+
+sock.ev.on('group-participants.update', async (update) => {
+    try {
+        if (!global.welcomeConfig?.enabled) return
+
+        const groupId = update.id
+
+        for (const participant of update.participants) {
+
+            const userId = typeof participant === 'string'
+                ? participant
+                : participant.phoneNumber || participant.id
+
+            if (!userId) continue
+
+            const memberName = userId.split('@')[0]
+
+            if (update.action === 'add') {
+
+                if (userId === sock.user.id) continue
+
+                const text = `👋 Welcome @${memberName}!\n🎉 Glad to have you in this group!`
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [userId]
+                })
+
+            } else if (update.action === 'remove') {
+
+                const text = `ya @${memberName} has left the group.\nWe are not gonna miss you!`
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [userId]
+                })
+
+            }
+        }
+
+    } catch (err) {
+        console.error('❌ group-participants.update error:', err)
+    }
+})
+            // Handle message reactions
+            sock.ev.on('messages.reaction', async (reactions) => {
+                console.log('💖 Reaction update:', reactions);
+                // Handle reactions if needed
+            });
+
+        } catch (error) {
+            console.error('❌ Bot startup error:', error);
+            isConnecting = false;
+            setTimeout(() => startBot(), 10000);
+        }
+    })();
+}
+
+// SIMPLE HTML SERVER
+const server = http.createServer((req, res) => {
+    const url = req.url;
+    
+    if (url === '/' || url === '/qr') {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>WhatsApp Bot | Multi-Feature Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #6b7280;
+      --line: #d9e1ea;
+      --panel: rgba(255, 255, 255, 0.86);
+      --green: #16a34a;
+      --cyan: #0891b2;
+      --amber: #f59e0b;
+      --purple: #8b5cf6;
+      --shadow: 0 24px 70px rgba(20, 35, 58, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 18rem),
+                  linear-gradient(180deg, #f8fafc, #eef6f1);
+      display: grid;
+      place-items: center;
+      padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+
+    .app {
+      width: min(560px, 100%);
+      min-height: min(800px, calc(100vh - 32px));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      margin: -14px -14px 0;
+      padding: max(14px, env(safe-area-inset-top)) 14px 12px;
+      background: rgba(248, 250, 252, 0.88);
+      border-bottom: 1px solid rgba(217, 225, 234, 0.76);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-weight: 900;
+      font-size: 1.08rem;
+    }
+
+    .brand i {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      border-radius: 12px;
+      font-size: 1.3rem;
+    }
+
+    .status-pill {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      background: white;
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #94a3b8;
+    }
+
+    .status-dot.disconnected { background: #ef4444; box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.1); animation: pulse 1.2s infinite alternate; }
+    .status-dot.connecting { background: var(--amber); box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.2); animation: pulse 1.2s infinite alternate; }
+    .status-dot.connected { background: #22c55e; box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.18); animation: pulse 0.9s infinite alternate; }
+
+    @keyframes pulse {
+      from { transform: scale(0.92); opacity: 0.72; }
+      to { transform: scale(1.1); opacity: 1; }
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(20, 35, 58, 0.08);
+    }
+
+    .panel-head {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+    }
+
+    .panel-title i {
+      color: var(--green);
+    }
+
+    .tag {
+      padding: 7px 9px;
+      border-radius: 40px;
+      background: #ecfeff;
+      color: #0e7490;
+      font-weight: 900;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 24px;
+      background: linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+                  linear-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+                  #ffffff;
+      background-size: 28px 28px;
+    }
+
+    .qr-wrapper {
+      background: white;
+      padding: 16px;
+      border-radius: 24px;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.12);
+      border: 1px solid #e5e7eb;
+    }
+
+    .qr-img {
+      width: min(58vw, 260px);
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+
+    .qr-placeholder {
+      width: min(58vw, 260px);
+      text-align: center;
+      padding: 40px 20px;
+      background: #f8fafc;
+      border-radius: 24px;
+      border: 2px dashed #cbd5e1;
+    }
+
+    .qr-placeholder i {
+      font-size: 3rem;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .qr-placeholder p {
+      color: #64748b;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .info-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #f1f5f9;
+      border-radius: 60px;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pairing-form {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .pairing-form label {
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: -4px;
+    }
+
+    .pairing-input {
+      width: 100%;
+      min-height: 50px;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      color: var(--ink);
+      padding: 0 18px;
+      font-weight: 600;
+      outline: none;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .pairing-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      min-height: 52px;
+      border: none;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      color: white;
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      filter: brightness(1.04);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--line);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #e2e8f0;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .pairing-code-box {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .pairing-code-box span {
+      font-size: clamp(2rem, 10vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #14532d;
+      font-family: monospace;
+    }
+
+    .pairing-code-box small {
+      display: block;
+      margin-top: 10px;
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .loader-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      color: #334155;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(22, 163, 74, 0.22);
+      border-top-color: var(--green);
+      border-radius: 999px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      color: #64748b;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .footer-note i {
+      color: var(--green);
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 0;
+      }
+      .app {
+        width: 100%;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+      .brand span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <i class="fab fa-whatsapp"></i>
+        <span>WhatsApp Bot</span>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot disconnected" id="statusDot"></span>
+        <span id="statusLabel">Disconnected</span>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <i class="fas fa-qrcode"></i> QR Login
+        </div>
+        <div class="tag">
+          <i class="fas fa-mobile-alt"></i> WhatsApp Web
+        </div>
+      </div>
+      <div id="qrArea" class="qr-container">
+        <div class="qr-placeholder" id="qrPlaceholder">
+          <i class="fas fa-spinner fa-pulse"></i>
+          <p>Loading QR code...</p>
+        </div>
+      </div>
+      <div id="statusText" class="loader-text">
+        <i class="fas fa-circle-info"></i>
+        <span>Waiting for connection...</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <i class="fas fa-key"></i> Pair with Code
+        </div>
+        <div class="tag">Alternative</div>
+      </div>
+      <div class="pairing-form">
+        <label>📱 Phone Number (with country code)</label>
+        <input type="tel" id="phoneNumber" class="pairing-input" placeholder="233533763772" autocomplete="off">
+        <button id="pairBtn" class="btn btn-primary">
+          <i class="fas fa-link"></i> Get Pairing Code
+        </button>
+      </div>
+      <div id="pairingCodeDisplay" style="display: none;" class="pairing-code-box">
+        <i class="fas fa-key" style="color: var(--green); font-size: 1.2rem;"></i>
+        <div>
+          <span id="pairingCode"></span>
+        </div>
+        <small>Enter this code in WhatsApp > Linked Devices > Link with phone number</small>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <i class="fas fa-shield-alt"></i>
+      <span>Session stored securely | Auto-reconnect enabled</span>
+    </div>
+  </main>
+
+  <script>
+    let refreshInterval = null;
+    let currentQR = null;
+
+    function setStatus(status) {
+      const statusElem = document.getElementById('statusLabel');
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+      
+      let statusLabel = '';
+      let dotClass = 'disconnected';
+      let loaderHtml = '';
+      
+      switch(status) {
+        case 'disconnected':
+          statusLabel = 'Disconnected';
+          dotClass = 'disconnected';
+          loaderHtml = '<i class="fas fa-circle-info"></i><span>Bot disconnected. Waiting for reconnection...</span>';
+          break;
+        case 'connecting':
+          statusLabel = 'Connecting';
+          dotClass = 'connecting';
+          loaderHtml = '<span class="spinner"></span><span>Connecting to WhatsApp...</span>';
+          break;
+        case 'connected':
+          statusLabel = 'Connected';
+          dotClass = 'connected';
+          loaderHtml = '<i class="fas fa-check-circle" style="color: #22c55e;"></i><span>Bot is online and ready!</span>';
+          break;
+        default:
+          statusLabel = status;
+          dotClass = 'disconnected';
+      }
+      
+      statusElem.innerText = statusLabel;
+      statusDot.className = 'status-dot ' + dotClass;
+      if (statusText) statusText.innerHTML = loaderHtml;
+    }
+
+    function updateQR(qrData) {
+      const qrArea = document.getElementById('qrArea');
+      if (qrData) {
+        currentQR = qrData;
+        qrArea.innerHTML = \`
+          <div class="qr-wrapper">
+            <img class="qr-img" src="\${qrData}" alt="QR Code">
+          </div>
+          <div class="info-text">
+            <i class="fas fa-camera"></i>
+            <span>Scan with WhatsApp > Linked Devices</span>
+          </div>
+        \`;
+      } else {
+        qrArea.innerHTML = \`
+          <div class="qr-placeholder">
+            <i class="fas fa-qrcode"></i>
+            <p>QR code will appear here when ready</p>
+          </div>
+        \`;
+      }
+    }
+
+    function updatePairingCode(code) {
+      const displayDiv = document.getElementById('pairingCodeDisplay');
+      const codeSpan = document.getElementById('pairingCode');
+      if (code && code !== 'null' && code !== 'undefined') {
+        codeSpan.innerText = code;
+        displayDiv.style.display = 'block';
+      } else {
+        displayDiv.style.display = 'none';
+      }
+    }
+
+    async function fetchStatus() {
+      try {
+        const resp = await fetch('/api/status');
+        if (!resp.ok) throw new Error('Status fetch failed');
+        const data = await resp.json();
+        
+        setStatus(data.status);
+        
+        if (data.qr && data.qr !== currentQR) {
+          updateQR(data.qr);
+        } else if (!data.qr && data.status !== 'connected') {
+          updateQR(null);
+        }
+        
+        updatePairingCode(data.pairingCode);
+        
+        if (data.status === 'connected') {
+          updateQR(null);
+        }
+      } catch (err) {
+        console.error('Status poll error:', err);
+      }
+    }
+
+    async function requestPairingCode() {
+      const phoneInput = document.getElementById('phoneNumber');
+      const phone = phoneInput.value.trim();
+      const pairBtn = document.getElementById('pairBtn');
+      
+      if (!phone) {
+        alert('Please enter your phone number with country code');
+        return;
+      }
+      
+      if (!phone.match(/^[0-9]{10,15}$/)) {
+        alert('Please enter a valid phone number (numbers only, with country code)');
+        return;
+      }
+      
+      pairBtn.disabled = true;
+      pairBtn.innerHTML = '<span class="spinner"></span><span>Requesting...</span>';
+      
+      try {
+        const formData = new URLSearchParams();
+        formData.append('phone', phone);
+        
+        const resp = await fetch('/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData
+        });
+        
+        const text = await resp.text();
+        if (resp.ok && text.includes('Pairing Code Generated')) {
+          fetchStatus();
+          setTimeout(() => fetchStatus(), 2000);
+        } else {
+          alert('Failed to get pairing code. Make sure bot is connecting first.');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        pairBtn.disabled = false;
+        pairBtn.innerHTML = '<i class="fas fa-link"></i> Get Pairing Code';
+      }
+    }
+    
+    document.getElementById('pairBtn').addEventListener('click', requestPairingCode);
+    document.getElementById('phoneNumber').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') requestPairingCode();
+    });
+    
+    refreshInterval = setInterval(fetchStatus, 2000);
+    fetchStatus();
+    
+    window.addEventListener('beforeunload', () => {
+      if (refreshInterval) clearInterval(refreshInterval);
+    });
+  </script>
+</body>
+</html>
+        `);
+    } 
+    
+    else if (url === '/pair' && req.method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(`
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial; padding: 20px; text-align: center; }
+        form { margin: 20px; padding: 20px; background: #f0f0f0; display: inline-block; }
+        input, button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔗 Pair WhatsApp</h1>
+    <form method="POST">
+        Phone: <input type="text" name="phone" placeholder="911234567890" required><br><br>
+        <button type="submit">Get Code</button><br><br>
+        <a href="/">← Back</a>
+    </form>
+</body>
+</html>
+        `);
+    }
+    
+    else if (url === '/pair' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', async () => {
+            try {
+                const params = new URLSearchParams(body);
+                let phoneNumber = params.get('phone').trim();
+                
+                if (!phoneNumber) {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.end(`
+                    <center>
+                    <h2>❌ Error: Phone number required</h2>
+                    <a href="/pair">Try Again</a>
+                    </center>
+                    `);
+                    return;
+                }
+
+                phoneNumber = phoneNumber.replace(/\D/g, '');
+                
+                if (botStatus !== 'connecting' || !sock) {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.end(`
+                    <center>
+                    <h2>⚠️ Bot not ready</h2>
+                    <p>Status: ${botStatus}</p>
+                    <p>Please wait for QR code to appear first</p>
+                    <a href="/">← Go Back</a>
+                    </center>
+                    `);
+                    return;
+                }
+
+                const pairingCode = await sock.requestPairingCode(phoneNumber);
+                
+                pairingCodes.set(phoneNumber, {
+                    code: pairingCode,
+                    timestamp: Date.now()
+                });
+
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(`
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial; padding: 20px; text-align: center; }
+        .code { font-size: 2em; color: green; font-weight: bold; margin: 20px; }
+        .info { background: #e8f5e8; padding: 15px; margin: 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>✅ Pairing Code Generated</h1>
+    <h2>Phone: ${phoneNumber}</h2>
+    
+    <div class="code">
+        Code: ${pairingCode}
+    </div>
+    
+    <div class="info">
+        <p>📱 Go to WhatsApp > Settings > Linked Devices > Link a Device</p>
+        <p>🔢 Select "Use pairing code" and enter the code above</p>
+    </div>
+    
+    <br>
+    <a href="/">🏠 Home</a> | <a href="/pair">🔄 Pair Another</a>
+</body>
+</html>
+                `);
+
+                console.log(`✅ Pairing code for ${phoneNumber}: ${pairingCode}`);
+                
+            } catch (error) {
+                console.error('❌ Pair error:', error);
+                
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(`
+                <center>
+                <h2>❌ Error</h2>
+                <p>${error.message}</p>
+                <p>Make sure the phone number is in international format (e.g., 911234567890)</p>
+                <a href="/pair">↩️ Try Again</a>
+                </center>
+                `);
+            }
+        });
+        return;
+    }
+    
+    else if (url === '/api/status') {
+        // Find any pending pairing code for response
+        let pairingCode = null;
+        for (const [_, data] of pairingCodes) {
+            if (Date.now() - data.timestamp < 300000) { // 5 minutes
+                pairingCode = data.code;
+                break;
+            }
+        }
+        
+        res.writeHead(200, { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        });
+        res.end(JSON.stringify({ 
+            status: botStatus,
+            hasQR: !!latestQR,
+            qr: latestQR,
+            pairingCode: pairingCode,
+            prefix: global.BOT_PREFIX,
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime()
+        }));
+    }
+    
+    else {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end(`
+        <center>
+        <h1>404 - Page Not Found</h1>
+        <a href="/">🏠 Go Home</a>
+        </center>
+        `);
+    }
+});
+
+// Start the server
+server.listen(PORT, () => {
+    console.log(`🌐 Web server running at http://localhost:${PORT}`);
+    console.log(`📁 Session folder: ${path.resolve(AUTH_FOLDER)}`);
+    loadPrefix();
+});
+
+
+process.on('SIGINT', () => {
+    console.log('\n👋 Shutting down gracefully...');
+    if (presenceInterval) clearInterval(presenceInterval);
+    if (sock) sock.end();
+    process.exit(0);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('⚠️ Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('⚠️ Unhandled Rejection:', reason);
+});
