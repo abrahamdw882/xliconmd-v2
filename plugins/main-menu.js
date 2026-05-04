@@ -14,48 +14,48 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
 
 ┌─ム ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs
 │
-├─ム ɢᴇɴᴇʀᴀʟ
+├─ム *ɢᴇɴᴇʀᴀʟ*
 │ ᪣ ${prefix}ᴀʟɪᴠᴇ
 │ ᪣ ${prefix}ᴘɪɴɢ
 │ ᪣ ${prefix}ᴜᴘᴛɪᴍᴇ
 │ ᪣ ${prefix}ᴏᴡɴᴇʀ
 │ ᪣ ${prefix}ᴍᴇɴᴜ2
 │
-├─ム ᴅᴏᴡɴʟᴏᴀᴅᴇʀs
+├─ム *ᴅᴏᴡɴʟᴏᴀᴅᴇʀs*
 │ ᪣ ${prefix}ᴛɪᴋᴛᴏᴋ / ${prefix}ᴛᴛ
 │ ᪣ ${prefix}ʏᴛᴍᴘ3
 │ ᪣ ${prefix}ɪɢ
 │
-├─ム ᴛᴏᴏʟs
+├─ム *ᴛᴏᴏʟs*
 │ ᪣ ${prefix}sᴛɪᴄᴋᴇʀ
 │ ᪣ ${prefix}ᴏᴄʀ
 │ ᪣ ${prefix}ᴛᴛs
 │ ᪣ ${prefix}ᴘᴏʟʟ
 │ ᪣ ${prefix}sʜᴀᴢᴀᴍ
 │
-├─ム ᴀɪ
+├─ム *ᴀɪ*
 │ ᪣ ${prefix}ᴀɪ
 │ ᪣ ${prefix}ᴀɪ-sᴇᴀʀᴄʜ
 │ ᪣ ${prefix}ᴀɪᴠ
 │ ᪣ ${prefix}ɢᴇɴ
 │
-├─ム ғᴜɴ
+├─ム *ғᴜɴ*
 │ ᪣ ${prefix}ʙʟᴜᴇ
 │
-├─ム ɢʀᴏᴜᴘ
+├─ム *ɢʀᴏᴜᴘ*
 │ ᪣ ${prefix}ᴛᴀɢᴀʟʟ
 │ ᪣ ${prefix}ᴛᴀɢᴀʟʟ1
 │ ᪣ ${prefix}ᴛᴀɢᴍᴇ
 │ ᪣ ${prefix}ᴄᴏᴜᴘʟᴇᴘᴘ
 │ ᪣ ${prefix}ɢʀᴏᴜᴘ
 │
-├─ム sᴛᴀᴛᴜs
+├─ム *sᴛᴀᴛᴜs*
 │ ᪣ ${prefix}ɢsᴛᴀᴛᴜs
 │
-├─ム ᴄʜᴀɴɴᴇʟ
+├─ム *ᴄʜᴀɴɴᴇʟ*
 │ ᪣ ${prefix}ᴄʜᴀɴɴᴇʟɪᴅ
 │
-├─ム ᴀᴅᴍɪɴ
+├─ム *ᴀᴅᴍɪɴ*
 │ ᪣ ${prefix}ᴋɪᴄᴋ
 │
 ╰─────────◆────────╯
@@ -64,8 +64,7 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
 `.trim();
 
 
-
-const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';    
+    const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';    
     const author = 'XLICON V2';    
     const botname = 'XLICON ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';    
     const sourceUrl = 'https://abztech.my.id/';    
