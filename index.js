@@ -1,5 +1,5 @@
 require('./config')
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto,generateProfilePicture } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto, generateProfilePicture } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const fs = require('fs');
 const path = require('path');
@@ -25,6 +25,11 @@ global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
 global.downloadMediaMessage = downloadMediaMessage;
+
+// Status auto-view/reaction configuration
+global.autoviewstatus = true;  // Auto-view status
+global.autolikestatus = true;  // Auto-react with random emojis
+
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
@@ -47,6 +52,17 @@ let pairingCodes = new Map();
 let presenceInterval = null;
 let sock = null;
 let isConnecting = false;
+
+// Helper function to resolve status participant
+function resolveStatusTarget(mek) {
+    if (mek.key.participant) return mek.key.participant;
+    if (mek.participant) return mek.participant;
+    if (mek.key.remoteJid === 'status@broadcast' && mek.key.id) {
+        if (mek.message?.extendedTextMessage?.contextInfo?.participant) 
+            return mek.message.extendedTextMessage.contextInfo.participant;
+    }
+    return null;
+}
 
 // Load prefix from config or use default
 function loadPrefix() {
@@ -80,7 +96,6 @@ function startBot() {
         try {
             const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
             if (creds.noiseKey && creds.noiseKey.private) {
-                // Session exists and seems valid
                 console.log('📁 Using existing session...');
             } else {
                 console.log('⚠️ Invalid session detected, will create new one...');
@@ -101,77 +116,78 @@ function startBot() {
                 version, 
                 logger: pino({ level: 'info' }),
                 auth: state,
-                printQRInTerminal: true, // Keep terminal QR for debugging
+                printQRInTerminal: true,
                 keepAliveIntervalMs: 10000,
                 markOnlineOnConnect: true,
                 syncFullHistory: false,
                 browser: ['Bot', 'Chrome', '1.0.0']
             });
             
-          sock.ev.on('connection.update', async (update) => {
-    const { connection, lastDisconnect, qr } = update;
+            sock.ev.on('connection.update', async (update) => {
+                const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
-        QRCode.toDataURL(qr, (err, url) => {
-            if (!err) {
-                latestQR = url;
-            }
-        });
-    }
+                if (qr) {
+                    QRCode.toDataURL(qr, (err, url) => {
+                        if (!err) {
+                            latestQR = url;
+                        }
+                    });
+                }
 
-    if (connection === 'close') {
-        botStatus = 'disconnected';
-        isConnecting = false;
+                if (connection === 'close') {
+                    botStatus = 'disconnected';
+                    isConnecting = false;
 
-        if (presenceInterval) {
-            clearInterval(presenceInterval);
-            presenceInterval = null;
-        }
+                    if (presenceInterval) {
+                        clearInterval(presenceInterval);
+                        presenceInterval = null;
+                    }
 
-        const statusCode = (lastDisconnect?.error instanceof Boom)
-            ? lastDisconnect.error.output.statusCode
-            : 0;
+                    const statusCode = (lastDisconnect?.error instanceof Boom)
+                        ? lastDisconnect.error.output.statusCode
+                        : 0;
 
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+                    const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
 
-        if (shouldReconnect) {
-            setTimeout(() => startBot(), 5000);
-        } else {
-            if (fs.existsSync(AUTH_FOLDER)) {
-                fs.rmSync(AUTH_FOLDER, { recursive: true, force: true });
-            }
-            setTimeout(() => startBot(), 3000);
-        }
-    } 
-    
-    else if (connection === 'open') {
-        botStatus = 'connected';
-        isConnecting = false;
+                    if (shouldReconnect) {
+                        setTimeout(() => startBot(), 5000);
+                    } else {
+                        if (fs.existsSync(AUTH_FOLDER)) {
+                            fs.rmSync(AUTH_FOLDER, { recursive: true, force: true });
+                        }
+                        setTimeout(() => startBot(), 3000);
+                    }
+                } 
+                
+                else if (connection === 'open') {
+                    botStatus = 'connected';
+                    isConnecting = false;
 
-        if (!global.owners) global.owners = [];
+                    if (!global.owners) global.owners = [];
 
-        if (!global.owners.includes(sock.user.id)) {
-            global.owners.push(sock.user.id);
-        }
+                    if (!global.owners.includes(sock.user.id)) {
+                        global.owners.push(sock.user.id);
+                    }
 
-        presenceInterval = setInterval(() => {
-            if (sock?.ws?.readyState === 1) {
-                sock.sendPresenceUpdate('available');
-            }
-        }, 10000);
+                    presenceInterval = setInterval(() => {
+                        if (sock?.ws?.readyState === 1) {
+                            sock.sendPresenceUpdate('available');
+                        }
+                    }, 10000);
 
-        try {
-            await sock.sendMessage(sock.user.id, {
-                text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
+                    try {
+                        await sock.sendMessage(sock.user.id, {
+                            text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
+                        });
+                    } catch (err) {}
+                } 
+                
+                else if (connection === 'connecting') {
+                    botStatus = 'connecting';
+                    isConnecting = true;
+                }
             });
-        } catch (err) {}
-    } 
-    
-    else if (connection === 'connecting') {
-        botStatus = 'connecting';
-        isConnecting = true;
-    }
-});
+            
             // Save credentials whenever they update
             sock.ev.on('creds.update', async () => {
                 await saveCreds();
@@ -212,103 +228,128 @@ function startBot() {
                 console.log('📁 No plugins folder found');
             }
            
-           sock.ev.on('messages.upsert', async ({ messages, type }) => {
-    if (type !== 'notify' && type !== 'append') return;
+            // MAIN MESSAGE HANDLER WITH STATUS SUPPORT
+            sock.ev.on('messages.upsert', async ({ messages, type }) => {
+                if (type !== 'notify' && type !== 'append') return;
                 
-    // Handle status auto-view
-    for (const rawMsg of messages) {
-        if (rawMsg.key.remoteJid === 'status@broadcast' && rawMsg.key.participant) {
-            try {
-                console.log(`📱 Status detected from: ${rawMsg.key.participant}`);
-                await sock.readMessages([rawMsg.key]);
-                continue;
-            } catch (err) {
-                console.log('❌ Status viewer error:', err.message);
-            }
-        }
-    }
+                // Handle all messages including status
+                for (const rawMsg of messages) {
+                    // ENHANCED STATUS HANDLING
+                    if (rawMsg.key.remoteJid === 'status@broadcast') {
+                        try {
+                            const participantJid = resolveStatusTarget(rawMsg);
+                            if (!participantJid) {
+                                console.log('⚠️ Could not resolve status participant');
+                                continue;
+                            }
 
-    const rawMsg = messages[0];
-    if (!rawMsg.message) return;
+                            const statusKey = {
+                                remoteJid: 'status@broadcast',
+                                id: rawMsg.key.id,
+                                fromMe: false,
+                                participant: participantJid
+                            };
 
-    const m = await serializeMessage(sock, rawMsg);
-    
-    // FIRST: Run onMessage handlers (for self plugin to block)
-    for (const plugin of plugins.values()) {
-        if (typeof plugin.onMessage === 'function') {
-            try { 
-                const blocked = await plugin.onMessage(sock, m);
-                if (blocked === true) return; // Stop if blocked
-            } catch (err) { 
-                console.error(`❌ onMessage error (${plugin.name}):`, err); 
-            }
-        }
-    }
-    
-    // THEN: Check for commands
-    if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
-        const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
-        const commandName = args.shift().toLowerCase();
-        const plugin = plugins.get(commandName);
-        
-        if (plugin) {
-            try { 
-                await plugin.execute(sock, m, args); 
-            } catch (err) { 
-                console.error(`❌ Plugin error (${commandName}):`, err); 
-                await m.reply('❌ Error running command.'); 
-            }
-        }
-    }
-});
+                            // Auto-view status
+                            if (global.autoviewstatus) {
+                                await sock.readMessages([statusKey]);
+                                console.log(`👀 Viewed status from ${participantJid}`);
+                            }
 
-sock.ev.on('group-participants.update', async (update) => {
-    try {
-        if (!global.welcomeConfig?.enabled) return
+                            
+                            if (global.autolikestatus) {
+                                const emojis = ['❤️','💸','😇','🍂','💥','💯','🔥','💫','💎','💗','🤍','🖤','👀','🙌','🙆','🚩','🥰','💐','😎','🤎','✅','⚡','🧡','😁','😄','🌸','🕊️','🌷','⛅','🌟','🗿','☠️','💜','💙','🌝','💚'];
+                                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                                
+                                await sock.sendMessage(
+                                    'status@broadcast',
+                                    { react: { text: emoji, key: statusKey } },
+                                    { statusJidList: [participantJid] }
+                                );
+                                
+                                console.log(`✅ Reacted to status from ${participantJid} with ${emoji}`);
+                            }
+                            
+                            continue; // Skip regular message processing for status
+                        } catch (err) {
+                            console.error('❌ Status handler error:', err.message);
+                        }
+                    }
+                }
 
-        const groupId = update.id
+                // REGULAR MESSAGE HANDLING
+                const rawMsg = messages[0];
+                if (!rawMsg.message) return;
 
-        for (const participant of update.participants) {
+                const m = await serializeMessage(sock, rawMsg);
+                
+                // Run onMessage handlers (for self plugin to block)
+                for (const plugin of plugins.values()) {
+                    if (typeof plugin.onMessage === 'function') {
+                        try { 
+                            const blocked = await plugin.onMessage(sock, m);
+                            if (blocked === true) return;
+                        } catch (err) { 
+                            console.error(`❌ onMessage error (${plugin.name}):`, err); 
+                        }
+                    }
+                }
+                
+                // Check for commands
+                if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
+                    const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
+                    const commandName = args.shift().toLowerCase();
+                    const plugin = plugins.get(commandName);
+                    
+                    if (plugin) {
+                        try { 
+                            await plugin.execute(sock, m, args); 
+                        } catch (err) { 
+                            console.error(`❌ Plugin error (${commandName}):`, err); 
+                            await m.reply('❌ Error running command.'); 
+                        }
+                    }
+                }
+            });
 
-            const userId = typeof participant === 'string'
-                ? participant
-                : participant.phoneNumber || participant.id
+            sock.ev.on('group-participants.update', async (update) => {
+                try {
+                    if (!global.welcomeConfig?.enabled) return
 
-            if (!userId) continue
+                    const groupId = update.id
 
-            const memberName = userId.split('@')[0]
+                    for (const participant of update.participants) {
+                        const userId = typeof participant === 'string'
+                            ? participant
+                            : participant.phoneNumber || participant.id
 
-            if (update.action === 'add') {
+                        if (!userId) continue
 
-                if (userId === sock.user.id) continue
+                        const memberName = userId.split('@')[0]
 
-                const text = `👋 Welcome @${memberName}!\n🎉 Glad to have you in this group!`
-
-                await sock.sendMessage(groupId, {
-                    text,
-                    mentions: [userId]
-                })
-
-            } else if (update.action === 'remove') {
-
-                const text = `ya @${memberName} has left the group.\nWe are not gonna miss you!`
-
-                await sock.sendMessage(groupId, {
-                    text,
-                    mentions: [userId]
-                })
-
-            }
-        }
-
-    } catch (err) {
-        console.error('❌ group-participants.update error:', err)
-    }
-})
+                        if (update.action === 'add') {
+                            if (userId === sock.user.id) continue
+                            const text = `👋 Welcome @${memberName}!\n🎉 Glad to have you in this group!`
+                            await sock.sendMessage(groupId, {
+                                text,
+                                mentions: [userId]
+                            })
+                        } else if (update.action === 'remove') {
+                            const text = `ya @${memberName} has left the group.\nWe are not gonna miss you!`
+                            await sock.sendMessage(groupId, {
+                                text,
+                                mentions: [userId]
+                            })
+                        }
+                    }
+                } catch (err) {
+                    console.error('❌ group-participants.update error:', err)
+                }
+            })
+            
             // Handle message reactions
             sock.ev.on('messages.reaction', async (reactions) => {
                 console.log('💖 Reaction update:', reactions);
-                // Handle reactions if needed
             });
 
         } catch (error) {
@@ -319,7 +360,7 @@ sock.ev.on('group-participants.update', async (update) => {
     })();
 }
 
-// SIMPLE HTML SERVER
+// SIMPLE HTML SERVER (same as before)
 const server = http.createServer((req, res) => {
     const url = req.url;
     
@@ -1046,10 +1087,9 @@ const server = http.createServer((req, res) => {
     }
     
     else if (url === '/api/status') {
-        // Find any pending pairing code for response
         let pairingCode = null;
         for (const [_, data] of pairingCodes) {
-            if (Date.now() - data.timestamp < 300000) { // 5 minutes
+            if (Date.now() - data.timestamp < 300000) {
                 pairingCode = data.code;
                 break;
             }
@@ -1087,7 +1127,6 @@ server.listen(PORT, () => {
     console.log(`📁 Session folder: ${path.resolve(AUTH_FOLDER)}`);
     loadPrefix();
 });
-
 
 process.on('SIGINT', () => {
     console.log('\n👋 Shutting down gracefully...');
