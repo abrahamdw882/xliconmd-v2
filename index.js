@@ -1,5 +1,5 @@
 require('./config')
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto, generateProfilePicture } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto,generateProfilePicture } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const fs = require('fs');
 const path = require('path');
@@ -25,22 +25,6 @@ global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
 global.downloadMediaMessage = downloadMediaMessage;
-
-// Status auto-view/reaction configuration
-global.autoviewstatus = true;  // Auto-view status
-global.autolikestatus = true;  // Auto-react with random emojis
-
-// Anti-spam cache for statuses
-global.reactedStatuses = new Set(); // Track reacted statuses
-global.viewedStatuses = new Set();  // Track viewed statuses
-
-// Clean up old cache entries every hour to prevent memory leak
-setInterval(() => {
-    if (global.reactedStatuses) global.reactedStatuses.clear();
-    if (global.viewedStatuses) global.viewedStatuses.clear();
-    console.log('🧹 Cleared status cache (anti-spam reset)');
-}, 3600000); // Clear every hour
-
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
@@ -63,17 +47,6 @@ let pairingCodes = new Map();
 let presenceInterval = null;
 let sock = null;
 let isConnecting = false;
-
-// Helper function to resolve status participant
-function resolveStatusTarget(mek) {
-    if (mek.key.participant) return mek.key.participant;
-    if (mek.participant) return mek.participant;
-    if (mek.key.remoteJid === 'status@broadcast' && mek.key.id) {
-        if (mek.message?.extendedTextMessage?.contextInfo?.participant) 
-            return mek.message.extendedTextMessage.contextInfo.participant;
-    }
-    return null;
-}
 
 // Load prefix from config or use default
 function loadPrefix() {
@@ -107,6 +80,7 @@ function startBot() {
         try {
             const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
             if (creds.noiseKey && creds.noiseKey.private) {
+                // Session exists and seems valid
                 console.log('📁 Using existing session...');
             } else {
                 console.log('⚠️ Invalid session detected, will create new one...');
@@ -127,78 +101,77 @@ function startBot() {
                 version, 
                 logger: pino({ level: 'info' }),
                 auth: state,
-                printQRInTerminal: true,
+                printQRInTerminal: true, // Keep terminal QR for debugging
                 keepAliveIntervalMs: 10000,
                 markOnlineOnConnect: true,
                 syncFullHistory: false,
                 browser: ['Bot', 'Chrome', '1.0.0']
             });
             
-            sock.ev.on('connection.update', async (update) => {
-                const { connection, lastDisconnect, qr } = update;
+          sock.ev.on('connection.update', async (update) => {
+    const { connection, lastDisconnect, qr } = update;
 
-                if (qr) {
-                    QRCode.toDataURL(qr, (err, url) => {
-                        if (!err) {
-                            latestQR = url;
-                        }
-                    });
-                }
+    if (qr) {
+        QRCode.toDataURL(qr, (err, url) => {
+            if (!err) {
+                latestQR = url;
+            }
+        });
+    }
 
-                if (connection === 'close') {
-                    botStatus = 'disconnected';
-                    isConnecting = false;
+    if (connection === 'close') {
+        botStatus = 'disconnected';
+        isConnecting = false;
 
-                    if (presenceInterval) {
-                        clearInterval(presenceInterval);
-                        presenceInterval = null;
-                    }
+        if (presenceInterval) {
+            clearInterval(presenceInterval);
+            presenceInterval = null;
+        }
 
-                    const statusCode = (lastDisconnect?.error instanceof Boom)
-                        ? lastDisconnect.error.output.statusCode
-                        : 0;
+        const statusCode = (lastDisconnect?.error instanceof Boom)
+            ? lastDisconnect.error.output.statusCode
+            : 0;
 
-                    const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
 
-                    if (shouldReconnect) {
-                        setTimeout(() => startBot(), 5000);
-                    } else {
-                        if (fs.existsSync(AUTH_FOLDER)) {
-                            fs.rmSync(AUTH_FOLDER, { recursive: true, force: true });
-                        }
-                        setTimeout(() => startBot(), 3000);
-                    }
-                } 
-                
-                else if (connection === 'open') {
-                    botStatus = 'connected';
-                    isConnecting = false;
+        if (shouldReconnect) {
+            setTimeout(() => startBot(), 5000);
+        } else {
+            if (fs.existsSync(AUTH_FOLDER)) {
+                fs.rmSync(AUTH_FOLDER, { recursive: true, force: true });
+            }
+            setTimeout(() => startBot(), 3000);
+        }
+    } 
+    
+    else if (connection === 'open') {
+        botStatus = 'connected';
+        isConnecting = false;
 
-                    if (!global.owners) global.owners = [];
+        if (!global.owners) global.owners = [];
 
-                    if (!global.owners.includes(sock.user.id)) {
-                        global.owners.push(sock.user.id);
-                    }
+        if (!global.owners.includes(sock.user.id)) {
+            global.owners.push(sock.user.id);
+        }
 
-                    presenceInterval = setInterval(() => {
-                        if (sock?.ws?.readyState === 1) {
-                            sock.sendPresenceUpdate('available');
-                        }
-                    }, 10000);
+        presenceInterval = setInterval(() => {
+            if (sock?.ws?.readyState === 1) {
+                sock.sendPresenceUpdate('available');
+            }
+        }, 10000);
 
-                    try {
-                        await sock.sendMessage(sock.user.id, {
-                            text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
-                        });
-                    } catch (err) {}
-                } 
-                
-                else if (connection === 'connecting') {
-                    botStatus = 'connecting';
-                    isConnecting = true;
-                }
+        try {
+            await sock.sendMessage(sock.user.id, {
+                text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
             });
-            
+        } catch (err) {}
+    } 
+    
+    else if (connection === 'connecting') {
+        botStatus = 'connecting';
+        isConnecting = true;
+    }
+});
             // Save credentials whenever they update
             sock.ev.on('creds.update', async () => {
                 await saveCreds();
@@ -239,138 +212,103 @@ function startBot() {
                 console.log('📁 No plugins folder found');
             }
            
-            // MAIN MESSAGE HANDLER WITH STATUS SUPPORT & ANTI-SPAM
-            sock.ev.on('messages.upsert', async ({ messages, type }) => {
-                if (type !== 'notify' && type !== 'append') return;
+           sock.ev.on('messages.upsert', async ({ messages, type }) => {
+    if (type !== 'notify' && type !== 'append') return;
                 
-                // Handle all messages including status
-                for (const rawMsg of messages) {
-                    // ENHANCED STATUS HANDLING WITH DUPLICATE PREVENTION
-                    if (rawMsg.key.remoteJid === 'status@broadcast') {
-                        try {
-                            const participantJid = resolveStatusTarget(rawMsg);
-                            if (!participantJid) {
-                                console.log('⚠️ Could not resolve status participant');
-                                continue;
-                            }
+    // Handle status auto-view
+    for (const rawMsg of messages) {
+        if (rawMsg.key.remoteJid === 'status@broadcast' && rawMsg.key.participant) {
+            try {
+                console.log(`📱 Status detected from: ${rawMsg.key.participant}`);
+                await sock.readMessages([rawMsg.key]);
+                continue;
+            } catch (err) {
+                console.log('❌ Status viewer error:', err.message);
+            }
+        }
+    }
 
-                            const statusId = rawMsg.key.id;
-                            const uniqueKey = `${statusId}_${participantJid}`;
+    const rawMsg = messages[0];
+    if (!rawMsg.message) return;
 
-                            // Auto-view status (only once per status)
-                            if (global.autoviewstatus && !global.viewedStatuses.has(uniqueKey)) {
-                                await sock.readMessages([{
-                                    remoteJid: 'status@broadcast',
-                                    id: statusId,
-                                    fromMe: false,
-                                    participant: participantJid
-                                }]);
-                                global.viewedStatuses.add(uniqueKey);
-                                console.log(`👀 Viewed status from ${participantJid}`);
-                            }
+    const m = await serializeMessage(sock, rawMsg);
+    
+    // FIRST: Run onMessage handlers (for self plugin to block)
+    for (const plugin of plugins.values()) {
+        if (typeof plugin.onMessage === 'function') {
+            try { 
+                const blocked = await plugin.onMessage(sock, m);
+                if (blocked === true) return; // Stop if blocked
+            } catch (err) { 
+                console.error(`❌ onMessage error (${plugin.name}):`, err); 
+            }
+        }
+    }
+    
+    // THEN: Check for commands
+    if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
+        const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
+        const commandName = args.shift().toLowerCase();
+        const plugin = plugins.get(commandName);
+        
+        if (plugin) {
+            try { 
+                await plugin.execute(sock, m, args); 
+            } catch (err) { 
+                console.error(`❌ Plugin error (${commandName}):`, err); 
+                await m.reply('❌ Error running command.'); 
+            }
+        }
+    }
+});
 
-                            // Auto-reaction (only once per status)
-                            if (global.autolikestatus && !global.reactedStatuses.has(uniqueKey)) {
-                                const emojis = ['❤️','💸','😇','🍂','💥','💯','🔥','💫','💎','💗','🤍','🖤','👀','🙌','🙆','🚩','🥰','💐','😎','🤎','✅','⚡','🧡','😁','😄','🌸','🕊️','🌷','⛅','🌟','🗿','☠️','💜','💙','🌝','💚'];
-                                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-                                
-                                await sock.sendMessage('status@broadcast', {
-                                    react: { 
-                                        text: emoji, 
-                                        key: {
-                                            remoteJid: 'status@broadcast',
-                                            id: statusId,
-                                            fromMe: false,
-                                            participant: participantJid
-                                        }
-                                    }
-                                });
-                                
-                                global.reactedStatuses.add(uniqueKey);
-                                console.log(`✅ Reacted to status from ${participantJid} with ${emoji}`);
-                            }
-                            
-                            continue; // Skip regular message processing for status
-                        } catch (err) {
-                            console.error('❌ Status handler error:', err.message);
-                        }
-                    }
-                }
+sock.ev.on('group-participants.update', async (update) => {
+    try {
+        if (!global.welcomeConfig?.enabled) return
 
-                // REGULAR MESSAGE HANDLING
-                const rawMsg = messages[0];
-                if (!rawMsg.message) return;
+        const groupId = update.id
 
-                const m = await serializeMessage(sock, rawMsg);
-                
-                // Run onMessage handlers (for self plugin to block)
-                for (const plugin of plugins.values()) {
-                    if (typeof plugin.onMessage === 'function') {
-                        try { 
-                            const blocked = await plugin.onMessage(sock, m);
-                            if (blocked === true) return;
-                        } catch (err) { 
-                            console.error(`❌ onMessage error (${plugin.name}):`, err); 
-                        }
-                    }
-                }
-                
-                // Check for commands
-                if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
-                    const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
-                    const commandName = args.shift().toLowerCase();
-                    const plugin = plugins.get(commandName);
-                    
-                    if (plugin) {
-                        try { 
-                            await plugin.execute(sock, m, args); 
-                        } catch (err) { 
-                            console.error(`❌ Plugin error (${commandName}):`, err); 
-                            await m.reply('❌ Error running command.'); 
-                        }
-                    }
-                }
-            });
+        for (const participant of update.participants) {
 
-            sock.ev.on('group-participants.update', async (update) => {
-                try {
-                    if (!global.welcomeConfig?.enabled) return
+            const userId = typeof participant === 'string'
+                ? participant
+                : participant.phoneNumber || participant.id
 
-                    const groupId = update.id
+            if (!userId) continue
 
-                    for (const participant of update.participants) {
-                        const userId = typeof participant === 'string'
-                            ? participant
-                            : participant.phoneNumber || participant.id
+            const memberName = userId.split('@')[0]
 
-                        if (!userId) continue
+            if (update.action === 'add') {
 
-                        const memberName = userId.split('@')[0]
+                if (userId === sock.user.id) continue
 
-                        if (update.action === 'add') {
-                            if (userId === sock.user.id) continue
-                            const text = `👋 Welcome @${memberName}!\n🎉 Glad to have you in this group!`
-                            await sock.sendMessage(groupId, {
-                                text,
-                                mentions: [userId]
-                            })
-                        } else if (update.action === 'remove') {
-                            const text = `ya @${memberName} has left the group.\nWe are not gonna miss you!`
-                            await sock.sendMessage(groupId, {
-                                text,
-                                mentions: [userId]
-                            })
-                        }
-                    }
-                } catch (err) {
-                    console.error('❌ group-participants.update error:', err)
-                }
-            })
-            
+                const text = `👋 Welcome @${memberName}!\n🎉 Glad to have you in this group!`
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [userId]
+                })
+
+            } else if (update.action === 'remove') {
+
+                const text = `ya @${memberName} has left the group.\nWe are not gonna miss you!`
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [userId]
+                })
+
+            }
+        }
+
+    } catch (err) {
+        console.error('❌ group-participants.update error:', err)
+    }
+})
             // Handle message reactions
             sock.ev.on('messages.reaction', async (reactions) => {
-                // Only log if you want to see reactions (can be commented out)
-                // console.log('💖 Reaction update:', reactions);
+                console.log('💖 Reaction update:', reactions);
+                // Handle reactions if needed
             });
 
         } catch (error) {
@@ -1108,9 +1046,10 @@ const server = http.createServer((req, res) => {
     }
     
     else if (url === '/api/status') {
+        // Find any pending pairing code for response
         let pairingCode = null;
         for (const [_, data] of pairingCodes) {
-            if (Date.now() - data.timestamp < 300000) {
+            if (Date.now() - data.timestamp < 300000) { // 5 minutes
                 pairingCode = data.code;
                 break;
             }
@@ -1148,6 +1087,7 @@ server.listen(PORT, () => {
     console.log(`📁 Session folder: ${path.resolve(AUTH_FOLDER)}`);
     loadPrefix();
 });
+
 
 process.on('SIGINT', () => {
     console.log('\n👋 Shutting down gracefully...');
