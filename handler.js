@@ -31,6 +31,14 @@ function checkDev(sender = '') {
 }
 
 async function serializeMessage(sock, msg) {
+    if (msg.key?.remoteJid && msg.key.remoteJid.includes('@lid') && global.lidToJID) {
+        msg.key.remoteJid = await global.lidToJID(msg.key.remoteJid, sock);
+    }
+    
+    if (msg.key?.participant && msg.key.participant.includes('@lid') && global.lidToJID) {
+        msg.key.participant = await global.lidToJID(msg.key.participant, sock);
+    }
+    
     const from = msg.key?.remoteJid || ''
     const isGroup = from.endsWith('@g.us')
     const sender = msg.key?.fromMe
@@ -154,6 +162,7 @@ async function serializeMessage(sock, msg) {
     }
 
     return {
+        key: msg.key,
         id: msg.key?.id,
         from,
         sender,
@@ -170,7 +179,7 @@ async function serializeMessage(sock, msg) {
         mimetype,
         quoted,
         isOwner,
-        isDev,  // Add this line
+        isDev,
         isAdmin,
         isBotAdmin,
         isGroupOwner,
