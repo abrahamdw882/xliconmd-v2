@@ -1,53 +1,66 @@
-import axios from 'axios';
+const axios = require('axios');
+const FormData = require('form-data');
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ status: false, message: "Use POST" });
-  }
+const client = axios.create({
+  baseURL: 'https://api-abztech.zone.id/ai/gen2'  
+});
 
-  try {
-    const EXTERNAL_API = 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro';
-    const response = await axios({
-      method: 'POST',
-      url: `${EXTERNAL_API}/process-image`,
-      data: req.body,
-      headers: {
-        ...req.headers,
-        host: 'emam-api-test.vercel.app'
-      },
-      maxBodyLength: Infinity,
-      maxContentLength: Infinity
-    });
+const validRatios = ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3", "custom"];
 
-    const { recordId } = response.data;
-    
-    if (!recordId) {
-      throw new Error('No record ID received');
+module.exports = {
+    name: 'gen2',
+    aliases: ['editimage', 'imgpro'],
+    description: 'Edit images using AI based on prompt',
+
+    async execute(sock, m, args) {
+        if (!args[0]) {
+            return m.reply(` Usᴀɢᴇ:
+.ɢᴇɴ2 <ᴘʀᴏᴍᴘᴛ> | <ʀᴀᴛɪᴏ>
+
+Exᴀᴍᴘʟᴇ:
+.ɢᴇɴ2 ᴍᴀᴋᴇ sᴋɪɴ ʙʟᴀᴄᴋ | 1:1
+
+Aᴠᴀɪʟᴀʙʟᴇ ʀᴀᴛɪᴏs: 
+1:1, 16:9, 3:2, 2:3, 4:5, 5:4, 9:16, 3:4, 4:3, ᴄᴜsᴛᴏᴍ`);
+        }
+
+        if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.includes('image')) {
+            return m.reply('⚠️ Pʟᴇᴀsᴇ ǫᴜᴏᴛᴇ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ ᴇᴅɪᴛ');
+        }
+
+        await m.reply('⏳ Pʀᴏᴄᴇssɪɴɢ ʏᴏᴜʀ ɪᴍᴀɢᴇ...');
+
+        try {
+            let [prompt, size] = args.join(' ').split('|');
+            if (!prompt) prompt = args.join(' ');
+
+            const imageBuffer = await m.quoted.download();
+            
+            const formData = new FormData();
+            formData.append('image', imageBuffer, 'image.jpg');
+            formData.append('prompt', prompt.trim());
+            if (size && validRatios.includes(size.trim())) formData.append('size', size.trim());
+            const response = await client.post('', formData, {
+                headers: {
+                    ...formData.getHeaders()
+                },
+                maxBodyLength: Infinity,
+                maxContentLength: Infinity,
+                timeout: 180000 
+            });
+
+            if (!response.data.status || !response.data.data?.image) {
+                throw new Error(response.data.message || 'Failed to process image');
+            }
+            const resultImage = Buffer.from(response.data.data.image, 'base64');
+
+            await m.reply(resultImage, {
+                caption: '✅ Iᴍᴀɢᴇ ᴇᴅɪᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!'
+            });
+
+        } catch (err) {
+            console.error('Gen2 error:', err);
+            await m.reply(`❌ Eʀʀᴏʀ: ${err.message}`);
+        }
     }
-    
-    // Poll and return result
-    let result = null;
-    for (let i = 0; i < 40; i++) {
-      await new Promise(r => setTimeout(r, 3000));
-      const check = await axios.get(`${EXTERNAL_API}/check-result?rid=${recordId}`, {
-        responseType: 'arraybuffer'
-      });
-      
-      if (check.headers['content-type']?.includes('image')) {
-        result = check.data;
-        break;
-      }
-    }
-
-    if (!result) throw new Error('Timeout - processing took too long');
-    
-    // Return as base64
-    res.json({
-      status: true,
-      data: { image: Buffer.from(result).toString('base64') }
-    });
-
-  } catch (err) {
-    res.status(500).json({ status: false, message: err.message });
-  }
-}
+};
