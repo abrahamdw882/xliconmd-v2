@@ -12,11 +12,11 @@ module.exports = {
 
         if (m.body.startsWith(global.BOT_PREFIX + 'banchat')) {
 
-            if (global.bannedChats.includes(m.chat)) {
+            if (global.bannedChats.includes(m.from)) {
                 return m.reply('⚠️ ɢʀᴏᴜᴘ ᴀʟʀᴇᴀᴅʏ ʙᴀɴɴᴇᴅ');
             }
 
-            global.bannedChats.push(m.chat);
+            global.bannedChats.push(m.from);
 
             return m.reply('✅ ʙᴏᴛ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ');
         }
@@ -28,7 +28,7 @@ module.exports = {
             }
 
             global.bannedChats =
-                global.bannedChats.filter(id => id !== m.chat);
+                global.bannedChats.filter(id => id !== m.from);
 
             return m.reply('✅ ʙᴏᴛ ᴜɴʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ');
         }
@@ -36,7 +36,7 @@ module.exports = {
 
     async onMessage(sock, m) {
 
-        if (!global.bannedChats.includes(m.chat)) {
+        if (!global.bannedChats.includes(m.from)) {
             return false;
         }
 
