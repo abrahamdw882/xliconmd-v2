@@ -9,13 +9,14 @@ module.exports = {
         const start = Date.now();
         await m.reply('Pinging...');
         const latency = Date.now() - start;
-        const info = `> Latency: ${latency} ms`;
+        const info = `Latency: ${latency} ms`;
 
         try {
-            const imageBuffer = (await axios.get(global.menuImage, { responseType: 'arraybuffer' })).data;
-
-            await m.reply(imageBuffer, {
-                caption: info,
+            await m.reply({
+                contact: {
+                    displayName: 'AB-Z TECH BOT',
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:AB-Z TECH BOT\nORG:ABZ Tech\nTITLE:WhatsApp Bot\nTEL;waid=${m.senderNumber || '1234567890'}:+${m.senderNumber || '1234567890'}\nURL:https://abztech.my.id/\nNOTE:${info}\nEND:VCARD`
+                },
                 contextInfo: {
                     forwardingScore: 999,
                     isForwarded: true,
@@ -27,8 +28,8 @@ module.exports = {
                 }
             });
         } catch (err) {
-            console.error('Menu error:', err);
-            return;
+            console.error('Ping error:', err);
+            await m.reply(info);
         }
     }
 };
