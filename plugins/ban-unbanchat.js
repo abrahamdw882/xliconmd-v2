@@ -23,7 +23,7 @@ module.exports = {
 
         if (m.body.startsWith(global.BOT_PREFIX + 'unbanchat')) {
 
-            if (!global.bannedChats.includes(m.chat)) {
+            if (!global.bannedChats.includes(m.from)) {
                 return m.reply('⚠️ ɢʀᴏᴜᴘ ɪs ɴᴏᴛ ʙᴀɴɴᴇᴅ');
             }
 
