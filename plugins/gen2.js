@@ -2,7 +2,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 
 const client = axios.create({
-  baseURL: 'https://api-abztech.zone.id/ai/gen2'  
+  baseURL: 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro'
 });
 
 const validRatios = ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3", "custom"];
@@ -40,21 +40,51 @@ Aᴠᴀɪʟᴀʙʟᴇ ʀᴀᴛɪᴏs:
             formData.append('image', imageBuffer, 'image.jpg');
             formData.append('prompt', prompt.trim());
             if (size && validRatios.includes(size.trim())) formData.append('size', size.trim());
-            const response = await client.post('', formData, {
+
+            const createRes = await client.post('/process-image', formData, {
                 headers: {
                     ...formData.getHeaders()
-                },
-                maxBodyLength: Infinity,
-                maxContentLength: Infinity,
-                timeout: 180000 
+                }
             });
 
-            if (!response.data.status || !response.data.data?.image) {
-                throw new Error(response.data.message || 'Failed to process image');
+            const { status, recordId, message } = createRes.data;
+            
+            if (!status || !recordId) {
+                throw new Error(message || 'Fᴀɪʟᴇᴅ ᴛᴏ sᴛᴀʀᴛ ᴘʀᴏᴄᴇssɪɴɢ');
             }
-            const resultImage = Buffer.from(response.data.data.image, 'base64');
 
-            await m.reply(resultImage, {
+            let result = null;
+            let error = null;
+            let maxRetries = 40;
+            let retries = 0;
+
+            while (!result && !error && retries < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                retries++;
+                
+                const getRes = await client.get(`/check-result?rid=${recordId}`, {
+                    responseType: 'arraybuffer'
+                });
+                
+                const contentType = getRes.headers['content-type'];
+                
+                if (contentType?.includes('application/json')) {
+                    const jsonData = JSON.parse(Buffer.from(getRes.data).toString('utf-8'));
+                    if (jsonData.status === false && jsonData.message !== 'Processing not completed yet') {
+                        error = jsonData.message;
+                        break;
+                    }
+                } else if (contentType?.includes('image')) {
+                    result = getRes.data;
+                    break;
+                }
+            }
+
+            if (retries >= maxRetries) throw new Error('Mᴀx ʀᴇᴛʀɪᴇs ʀᴇᴀᴄʜᴇᴅ, ɴᴏ ʀᴇsᴜʟᴛ');
+            if (error) throw new Error(error);
+            if (!result) throw new Error('Nᴏ ʀᴇsᴜʟᴛ ᴏʙᴛᴀɪɴᴇᴅ');
+
+            await m.reply(Buffer.from(result), {
                 caption: '✅ Iᴍᴀɢᴇ ᴇᴅɪᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!'
             });
 
