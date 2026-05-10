@@ -63,32 +63,16 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
 > 「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」
 `.trim();
 
-
     const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';    
-    const author = 'XLICON V2';    
-    const botname = 'XLICON ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';    
-    const sourceUrl = 'https://abztech.my.id/';    
 
     try {    
-        const thumbnailBuffer = (await axios.get(imgUrl, { responseType: 'arraybuffer' })).data;    
-
-        await m.send(menuText, {    
-            contextInfo: {    
-                forwardingScore: 999,    
-                isForwarded: true,    
-                externalAdReply: {    
-                    title: author,    
-                    body: botname,    
-                    thumbnail: thumbnailBuffer,    
-                    mediaType: 1,    
-                    renderLargerThumbnail: true,    
-                    sourceUrl    
-                }    
-            }    
-        });    
+        const imageBuffer = (await axios.get(imgUrl, { responseType: 'arraybuffer' })).data;    
+        
+        await m.reply(imageBuffer, { caption: menuText });
+        
     } catch (err) {    
         console.error('Menu error:', err);    
-        await m.reply('ғᴀɪʟᴇᴅ ᴛᴏ ʟᴏᴀᴅ ᴍᴇɴᴜ');    
+        await m.reply('feked up\n\n' + menuText);
     }    
 }
 
