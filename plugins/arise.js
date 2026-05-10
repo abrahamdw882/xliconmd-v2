@@ -15,31 +15,25 @@ module.exports = {
 
         if (isTriggered) {
             const info = '*BOT ACTIVE AND RUNNING...*';
-            const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';
-            const author = 'XLIOCN V2';
-            const botname = 'XLIOCN V2 ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ';
-            const sourceUrl = 'https://abztech.my.id/';
 
             try {
-                const thumbnailBuffer = (await axios.get(imgUrl, { responseType: 'arraybuffer' })).data;
+                const imageBuffer = (await axios.get(global.menuImage, { responseType: 'arraybuffer' })).data;
 
-                await m.send(info, {
+                await m.reply(imageBuffer, {
+                    caption: info,
                     contextInfo: {
                         forwardingScore: 999,
                         isForwarded: true,
-                        externalAdReply: {
-                            title: author,
-                            body: botname,
-                            thumbnail: thumbnailBuffer,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                            sourceUrl
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363230794474148@newsletter',
+                            newsletterName: '──𝘈𝘉-𝘡𝘛𝘌𝘊𝘏🇬🇭「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」',
+                            serverMessageId: 1
                         }
                     }
                 });
             } catch (err) {
-                console.error('❌ Error sending preview message:', err);
-                await m.reply('⚠️ Failed to send auto-response.');
+                console.error('Menu error:', err);
+                return;
             }
         }
     }
