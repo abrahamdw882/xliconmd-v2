@@ -12,7 +12,7 @@ module.exports = {
         const info = `Latency: ${latency} ms`;
 
         try {
-            await m.reply({
+            await sock.sendMessage(m.from, {
                 contact: {
                     displayName: 'AB-Z TECH BOT',
                     vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:AB-Z TECH BOT\nORG:ABZ Tech\nTITLE:WhatsApp Bot\nTEL;waid=${m.senderNumber || '1234567890'}:+${m.senderNumber || '1234567890'}\nURL:https://abztech.my.id/\nNOTE:${info}\nEND:VCARD`
