@@ -63,10 +63,8 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
 > 「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」
 `.trim();
 
-    const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';    
-
     try {    
-        const imageBuffer = (await axios.get(imgUrl, { responseType: 'arraybuffer' })).data;    
+        const imageBuffer = (await axios.get(global.menuImage, { responseType: 'arraybuffer' })).data;    
         
         await m.reply(imageBuffer, { 
             caption: menuText,
@@ -83,7 +81,7 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
         
     } catch (err) {    
         console.error('Menu error:', err);    
-       return;
+        return;
     }    
 }
 
