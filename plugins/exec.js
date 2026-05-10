@@ -28,10 +28,6 @@ module.exports = {
             }
 
             const info = '*ABZTech Exec*'
-            const imgUrl = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg'
-            const author = 'XLIOCN V2'
-            const botname = 'XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ'
-            const sourceUrl = 'https://abztech.my.id/'
 
             const sandbox = {
                 sock,
@@ -46,7 +42,7 @@ module.exports = {
                 generateWAMessageFromContent: global.generateWAMessageFromContent,
                 generateMessageID: global.generateMessageID
             }
-console.log('jimp:',typeof global.Jimp);
+
             const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
 
             let result
@@ -61,7 +57,6 @@ console.log('jimp:',typeof global.Jimp);
                 )(...Object.values(sandbox))
             }
 
-            
             let output
             if (result === undefined) {
                 output = 'ᴜɴᴅᴇғɪɴᴇᴅ'
@@ -77,29 +72,25 @@ console.log('jimp:',typeof global.Jimp);
 
             const text = `☑️ ʀᴇsᴜʟᴛ:\n\`\`\`\n${output.slice(0, 4000)}\n\`\`\``
 
-            let thumbnailBuffer = null
+            let imageBuffer = null
             try {
-                thumbnailBuffer = (
-                    await axios.get(imgUrl, { responseType: 'arraybuffer' })
-                ).data
+                imageBuffer = (await axios.get(global.menuImage, { responseType: 'arraybuffer' })).data
             } catch {}
 
-            await m.send(`${info}\n${text}`, {
+            await m.reply(imageBuffer, {
+                caption: `${info}\n${text}`,
                 contextInfo: {
                     forwardingScore: 999,
                     isForwarded: true,
-                    externalAdReply: {
-                        title: author,
-                        body: botname,
-                        thumbnail: thumbnailBuffer || undefined,
-                        mediaType: 1,
-                        renderLargerThumbnail: true,
-                        sourceUrl
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363230794474148@newsletter',
+                        newsletterName: '──𝘈𝘉-𝘡𝘛𝘌𝘊𝘏🇬🇭「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」',
+                        serverMessageId: 1
                     }
                 }
             })
         } catch (err) {
-            await m.send(`❌ Error:\n\`\`\`\n${err.stack || err.message}\n\`\`\``)
+            await m.reply(`❌ Error:\n\`\`\`\n${err.stack || err.message}\n\`\`\``)
         } finally {
             setTimeout(() => sentOnce.delete(m.id), 5000)
         }
