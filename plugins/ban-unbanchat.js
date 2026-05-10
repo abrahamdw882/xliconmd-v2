@@ -6,7 +6,7 @@ module.exports = {
 
         if (!global.owners.includes(m.sender)) return;
 
-        if (!m.chat.endsWith('@g.us')) {
+        if (!m.from.endsWith('@g.us')) {
             return m.reply('ᴛʜɪs ɪs ᴏɴʟʏ ғᴏʀ ɢʀᴏᴜᴘs');
         }
 
