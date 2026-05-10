@@ -7,6 +7,10 @@ module.exports = {
         const mentioned =
             m.message?.extendedTextMessage
             ?.contextInfo
+            ?.mentionedJid?.[0]
+            ||
+            m.quoted?.message?.extendedTextMessage
+            ?.contextInfo
             ?.mentionedJid?.[0];
 
         if (!mentioned) {
