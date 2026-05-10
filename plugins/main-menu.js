@@ -68,11 +68,22 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
     try {    
         const imageBuffer = (await axios.get(imgUrl, { responseType: 'arraybuffer' })).data;    
         
-        await m.reply(imageBuffer, { caption: menuText });
+        await m.reply(imageBuffer, { 
+            caption: menuText,
+            contextInfo: {
+                forwardingScore: 999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: '120363230794474148@newsletter',
+                    newsletterName: '──𝘈𝘉-𝘡𝘛𝘌𝘊𝘏🇬🇭「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」',
+                    serverMessageId: 1
+                }
+            }
+        });
         
     } catch (err) {    
         console.error('Menu error:', err);    
-        await m.reply('feked up\n\n' + menuText);
+       await m.reply('feked up\n\n' + menuText);
     }    
 }
 
