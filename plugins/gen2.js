@@ -1,96 +1,53 @@
-const axios = require('axios');
-const FormData = require('form-data');
+import axios from 'axios';
 
-const client = axios.create({
-  baseURL: 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro'
-});
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ status: false, message: "Use POST" });
+  }
 
-const validRatios = ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3", "custom"];
+  try {
+    const EXTERNAL_API = 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro';
+    const response = await axios({
+      method: 'POST',
+      url: `${EXTERNAL_API}/process-image`,
+      data: req.body,
+      headers: {
+        ...req.headers,
+        host: 'emam-api-test.vercel.app'
+      },
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity
+    });
 
-module.exports = {
-    name: 'gen2',
-    aliases: ['editimage', 'imgpro'],
-    description: 'Edit images using AI based on prompt',
-
-    async execute(sock, m, args) {
-        if (!args[0]) {
-            return m.reply(` Usᴀɢᴇ:
-.ɢᴇɴ2 <ᴘʀᴏᴍᴘᴛ> | <ʀᴀᴛɪᴏ>
-
-Exᴀᴍᴘʟᴇ:
-.ɢᴇɴ2 ᴍᴀᴋᴇ sᴋɪɴ ʙʟᴀᴄᴋ | 1:1
-
-Aᴠᴀɪʟᴀʙʟᴇ ʀᴀᴛɪᴏs: 
-1:1, 16:9, 3:2, 2:3, 4:5, 5:4, 9:16, 3:4, 4:3, ᴄᴜsᴛᴏᴍ`);
-        }
-
-        if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.includes('image')) {
-            return m.reply('⚠️ Pʟᴇᴀsᴇ ǫᴜᴏᴛᴇ ᴀɴ ɪᴍᴀɢᴇ ᴛᴏ ᴇᴅɪᴛ');
-        }
-
-        await m.reply('⏳ Pʀᴏᴄᴇssɪɴɢ ʏᴏᴜʀ ɪᴍᴀɢᴇ...');
-
-        try {
-            let [prompt, size] = args.join(' ').split('|');
-            if (!prompt) prompt = args.join(' ');
-
-            const imageBuffer = await m.quoted.download();
-            
-            const formData = new FormData();
-            formData.append('image', imageBuffer, 'image.jpg');
-            formData.append('prompt', prompt.trim());
-            if (size && validRatios.includes(size.trim())) formData.append('size', size.trim());
-
-            const createRes = await client.post('/process-image', formData, {
-                headers: {
-                    ...formData.getHeaders()
-                }
-            });
-
-            const { status, recordId, message } = createRes.data;
-            
-            if (!status || !recordId) {
-                throw new Error(message || 'Fᴀɪʟᴇᴅ ᴛᴏ sᴛᴀʀᴛ ᴘʀᴏᴄᴇssɪɴɢ');
-            }
-
-            let result = null;
-            let error = null;
-            let maxRetries = 40;
-            let retries = 0;
-
-            while (!result && !error && retries < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                retries++;
-                
-                const getRes = await client.get(`/check-result?rid=${recordId}`, {
-                    responseType: 'arraybuffer'
-                });
-                
-                const contentType = getRes.headers['content-type'];
-                
-                if (contentType?.includes('application/json')) {
-                    const jsonData = JSON.parse(Buffer.from(getRes.data).toString('utf-8'));
-                    if (jsonData.status === false && jsonData.message !== 'Processing not completed yet') {
-                        error = jsonData.message;
-                        break;
-                    }
-                } else if (contentType?.includes('image')) {
-                    result = getRes.data;
-                    break;
-                }
-            }
-
-            if (retries >= maxRetries) throw new Error('Mᴀx ʀᴇᴛʀɪᴇs ʀᴇᴀᴄʜᴇᴅ, ɴᴏ ʀᴇsᴜʟᴛ');
-            if (error) throw new Error(error);
-            if (!result) throw new Error('Nᴏ ʀᴇsᴜʟᴛ ᴏʙᴛᴀɪɴᴇᴅ');
-
-            await m.reply(Buffer.from(result), {
-                caption: '✅ Iᴍᴀɢᴇ ᴇᴅɪᴛᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!'
-            });
-
-        } catch (err) {
-            console.error('Gen2 error:', err);
-            await m.reply(`❌ Eʀʀᴏʀ: ${err.message}`);
-        }
+    const { recordId } = response.data;
+    
+    if (!recordId) {
+      throw new Error('No record ID received');
     }
-};
+    
+    // Poll and return result
+    let result = null;
+    for (let i = 0; i < 40; i++) {
+      await new Promise(r => setTimeout(r, 3000));
+      const check = await axios.get(`${EXTERNAL_API}/check-result?rid=${recordId}`, {
+        responseType: 'arraybuffer'
+      });
+      
+      if (check.headers['content-type']?.includes('image')) {
+        result = check.data;
+        break;
+      }
+    }
+
+    if (!result) throw new Error('Timeout - processing took too long');
+    
+    // Return as base64
+    res.json({
+      status: true,
+      data: { image: Buffer.from(result).toString('base64') }
+    });
+
+  } catch (err) {
+    res.status(500).json({ status: false, message: err.message });
+  }
+}
