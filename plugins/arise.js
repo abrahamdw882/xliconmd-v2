@@ -14,27 +14,18 @@ module.exports = {
         const isTriggered = triggers.some(word => text.startsWith(word));
 
         if (isTriggered) {
-            const info = '*BOT ACTIVE AND RUNNING...*';
+            const sentMsg = await m.reply('I have risen...');
 
-            try {
-                const imageBuffer = (await axios.get(global.menuImage, { responseType: 'arraybuffer' })).data;
-
-                await m.reply(imageBuffer, {
-                    caption: info,
-                    contextInfo: {
-                        forwardingScore: 999,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363230794474148@newsletter',
-                            newsletterName: '──𝘈𝘉-𝘡𝘛𝘌𝘊𝘏🇬🇭「 𝙏𝙞𝙢𝙚 - 𝙏𝙞𝙢𝙚𝙡𝙚𝙨𝙨 」',
-                            serverMessageId: 1
-                        }
-                    }
-                });
-            } catch (err) {
-                console.error('Menu error:', err);
-                return;
-            }
+            setTimeout(async () => {
+                try {
+                    await sock.sendMessage(m.from, {
+                        text: '*BOT ACTIVE AND RUNNING...*',
+                        edit: sentMsg.key
+                    });
+                } catch (err) {
+                    console.error('Autorise error:', err);
+                }
+            }, 1000);
         }
     }
 };
