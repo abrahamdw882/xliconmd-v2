@@ -83,7 +83,7 @@ XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
         
     } catch (err) {    
         console.error('Menu error:', err);    
-       await m.reply('feked up\n\n' + menuText);
+       return;
     }    
 }
 
