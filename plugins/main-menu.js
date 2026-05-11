@@ -25,7 +25,7 @@ async execute(sock, m) {
         timeZone: 'Africa/Accra'
     });
     
-    const botOwner = global.BOT_OWNER_NAME || 'ABZTECH';
+    const botOwner = global.ownerName  || 'ABZTECH';
     
     const user = m.pushName || m.sender?.split('@')[0] || 'User';
     
