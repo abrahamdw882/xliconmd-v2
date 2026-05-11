@@ -7,10 +7,37 @@ aliases: ['help', 'cmdlist', 'commands'],
 
 async execute(sock, m) {    
     const prefix = global.BOT_PREFIX || '.';    
-
+    
+    const now = new Date();
+    
+    const date = now.toLocaleDateString('en-GB', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric',
+        timeZone: 'Africa/Accra'
+    });
+    
+    const time = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        hour12: true,
+        timeZone: 'Africa/Accra'
+    });
+    
+    const botOwner = global.BOT_OWNER_NAME || 'ABZTECH';
+    
+    const user = m.pushName || m.sender?.split('@')[0] || 'User';
+    
     const menuText = `
 
-XLIOCN ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
+┌─ム xʟɪᴄᴏɴ ᴍᴜʟᴛɪᴅᴇᴠɪᴄᴇ
+│ ᴏᴡɴᴇʀ: ${botOwner}
+│ ᴜsᴇʀ: ${user}
+│ ᴅᴀᴛᴇ: ${date}
+│ ᴛɪᴍᴇ: ${time} (GMT)
+│ ᴘʀᴇғɪx: ${prefix}
+╰───────────────────╯
 
 ┌─ム ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs
 │
