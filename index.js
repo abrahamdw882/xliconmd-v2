@@ -226,23 +226,24 @@ function startBot() {
                 console.log('📁 No plugins folder found');
             }
            
-      sock.ev.on('messages.upsert', async ({ messages, type }) => {
+     sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify' && type !== 'append') return;
-              
+    
     const CHANNEL_ID = "120363230794474148@newsletter";
+    
     for (const rawMsg of messages) {
         if (rawMsg.key?.remoteJid === CHANNEL_ID && rawMsg.key?.server_id) {
             const emojis = ["❤️", "💛", "👍", "💜", "😮", "🤍", "💙", "🔥", "💯", "⚡"];
             const emoji = emojis[Math.floor(Math.random() * emojis.length)];
             
             try {
-                await sock.sendMessage(CHANNEL_ID, {
-                    react: {
-                        text: emoji,
-                        key: rawMsg.key
-                    }
-                });
-                console.log(`✅ Channel reaction: ${emoji} to message ${rawMsg.key?.server_id}`);
+              
+                await sock.newsletterReactMessage(
+                    CHANNEL_ID, 
+                    rawMsg.key.server_id.toString(), 
+                    emoji
+                );
+                console.log(`✅ Channel reaction: ${emoji} to message ${rawMsg.key.server_id}`);
             } catch (err) {
                 console.log("❌ Channel React Error:", err.message);
             }
