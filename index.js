@@ -25,7 +25,7 @@ global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
 global.downloadMediaMessage = downloadMediaMessage;
-global.bannedChats = global.bannedChats || [];
+
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
