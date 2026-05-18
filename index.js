@@ -38,7 +38,7 @@ if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
 
 // ====== Database Stuff ======= //
 const Database = require('./lib/database')
-global.db = new Database('./database/' + "configs.json")
+global.db = new Database('./Database/' + "configs.json")
 
 // ===== CONFIGURATION ===== //
 const AUTH_FOLDER = './session';
