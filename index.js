@@ -181,6 +181,7 @@ function startBot() {
                         await sock.sendMessage(sock.user.id, {
                             text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
                         });
+                      db.init()
                     } catch (err) {}
                 } 
                 
@@ -271,7 +272,8 @@ function startBot() {
     if (!rawMsg.message) return;
 
     const m = await serializeMessage(sock, rawMsg);
-    
+    try{ db.main(m) } catch(err) {console.log(err.message)}   
+       
     // FIRST: Run onMessage handlers (for self plugin to block)
     for (const plugin of plugins.values()) {
         if (typeof plugin.onMessage === 'function') {
