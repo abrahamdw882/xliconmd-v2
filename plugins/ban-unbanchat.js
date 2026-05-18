@@ -12,11 +12,11 @@ module.exports = {
 
         if (m.body.startsWith(global.BOT_PREFIX + 'banchat')) {
 
-            if (global.bannedChats.includes(m.from)) {
+            if (db.list().groups[m.from].enable === false) {
                 return m.reply('⚠️ ɢʀᴏᴜᴘ ᴀʟʀᴇᴀᴅʏ ʙᴀɴɴᴇᴅ');
             }
 
-            global.bannedChats.push(m.from);
+            db.editData('groups', m.from, false, 'enable')
 
             return m.reply('✅ ʙᴏᴛ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ');
         }
