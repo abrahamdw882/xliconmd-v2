@@ -45,14 +45,9 @@ module.exports = {
                     audio: { url: audioUrl },
                     mimetype: 'audio/mpeg',
                     ptt: false,
-                    fileName: 'TTS',
+                    fileName: 'TTS.mp3',
                     contextInfo: {
-                        mentionedJid: [m.sender],
-                        externalAdReply: {
-                            title: 'TTS',
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
+                        mentionedJid: [m.sender]
                     },
                 },
                 { quoted }
