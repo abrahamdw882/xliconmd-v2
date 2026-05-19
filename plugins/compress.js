@@ -32,7 +32,7 @@ module.exports = {
             fs.writeFileSync(input, buffer)
 
             execSync(
-                `"${ffmpeg.path}" -y -i "${input}" -vcodec libx264 -crf 35 -preset veryfast "${output}"`
+                `"${ffmpeg.path}" -y -i "${input}" -vcodec libx264 -crf 28 -preset veryfast "${output}"`
             )
 
             await sock.sendMessage(
