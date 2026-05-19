@@ -272,7 +272,12 @@ function startBot() {
     if (!rawMsg.message) return;
 
     const m = await serializeMessage(sock, rawMsg);
-    try{ db.main(m) } catch(err) {console.log(err.message)}   
+    try{ 
+      db.main(m)
+      db.store("./Database/store.json", m)
+    } catch(err) {
+      console.log(err.message)
+    }   
        
     // FIRST: Run onMessage handlers (for self plugin to block)
     for (const plugin of plugins.values()) {
