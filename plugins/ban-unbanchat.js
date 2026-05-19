@@ -42,7 +42,6 @@ module.exports = {
         }
 
         if (m.body && m.isGroup && m.body.startsWith(global.BOT_PREFIX)) {
-            await m.reply('❌ ʙᴏᴛ ɪs ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ')
             return true
         }
 
