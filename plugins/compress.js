@@ -9,19 +9,19 @@ module.exports = {
     async execute(sock, m) {
 
         if (!m.quoted) {
-            return m.reply('Reply to a video')
+            return m.reply('ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ')
         }
 
         const mime =
             m.quoted.message?.videoMessage?.mimetype || ''
 
         if (!mime.includes('video')) {
-            return m.reply('Reply to a video')
+            return m.reply('ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ')
         }
 
         try {
 
-            await m.reply('Compressing video...')
+            await m.reply('ᴄᴏᴍᴘʀᴇssɪɴɢ ᴠɪᴅᴇᴏ...')
 
             const input = './input.mp4'
             const output = './compressed.mp4'
@@ -40,7 +40,7 @@ module.exports = {
                 {
                     video: fs.readFileSync(output),
                     mimetype: 'video/mp4',
-                    caption: 'Compressed successfully'
+                    caption: 'ᴄᴏᴍᴘʀᴇssᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ'
                 }
             )
 
@@ -51,7 +51,7 @@ module.exports = {
 
             console.log(e)
 
-            m.reply('Failed to compress video')
+            m.reply('ғᴀɪʟᴇᴅ ᴛᴏ ᴄᴏᴍᴘʀᴇss ᴠɪᴅᴇᴏ')
         }
     }
 }
