@@ -9,19 +9,19 @@ module.exports = {
     async execute(sock, m) {
 
         if (!m.quoted) {
-            return m.reply('Reply to a video')
+            return m.reply('ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ')
         }
 
         const mime =
             m.quoted.message?.videoMessage?.mimetype || ''
 
         if (!mime.includes('video')) {
-            return m.reply('Reply to a video')
+            return m.reply('ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴠɪᴅᴇᴏ')
         }
 
         try {
 
-            await m.reply('Converting to audio...')
+            await m.reply('ᴄᴏɴᴠᴇʀᴛɪɴɢ ᴛᴏ ᴀᴜᴅɪᴏ...')
 
             const input = './video.mp4'
             const output = './audio.mp3'
@@ -50,7 +50,7 @@ module.exports = {
 
             console.log(e)
 
-            m.reply('Failed to convert video')
+            m.reply('ғᴀɪʟᴇᴅ ᴛᴏ ᴄᴏɴᴠᴇʀᴛ ᴠɪᴅᴇᴏ')
         }
     }
 }
