@@ -33,7 +33,7 @@ module.exports = {
     async onMessage(sock, m) {
         const groupData = db.get('groups', m.from)
         
-        if (!groupData || groupData.enable === true) {
+        if (!groupData || groupData.antistats === true) {
             return false
         }
 
@@ -42,7 +42,7 @@ module.exports = {
         }
 
         if (m.body && m.isGroup && m.message.groupStatusMentionMessage) {
-          Lord.sendMessage(m.sender, {delete: m.key}, {quoted: m})
+          await sock.sendMessage(m.sender, {delete: m.key}, {quoted: m})
           m.reply("ᴅᴇʟᴇᴛᴇᴅ")
             
           return true
