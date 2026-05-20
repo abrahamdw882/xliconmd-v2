@@ -41,7 +41,7 @@ module.exports = {
             return false
         }
 
-        if (m.body && m.isGroup && m.message.groupStatusMentionMessage) {
+        if (m.body && m.isGroup && m.message?.groupStatusMentionMessage) {
           await sock.sendMessage(m.sender, {delete: m.key}, {quoted: m})
           m.reply("ᴅᴇʟᴇᴛᴇᴅ")
             
