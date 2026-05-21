@@ -25,7 +25,7 @@ global.proto = proto;
 global.Jimp = Jimp;
 global.generateProfilePicture = generateProfilePicture;
 global.downloadMediaMessage = downloadMediaMessage;
-
+global.bannedChats = global.bannedChats || [];
 if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
     try {
         const sessionData = JSON.parse(global.sessionid);
@@ -35,10 +35,6 @@ if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
         console.error('Error restoring session:', err);
     }
 }
-
-// ====== Database Stuff ======= //
-const Database = require('./lib/database')
-global.db = new Database('./Database/' + "configs.json")
 
 // ===== CONFIGURATION ===== //
 const AUTH_FOLDER = './session';
@@ -104,7 +100,7 @@ function startBot() {
             
             sock = makeWASocket({
                 version, 
-                logger: pino({ level: 'silent' }),
+                logger: pino({ level: 'info' }),
                 auth: state,
                 printQRInTerminal: true,
                 keepAliveIntervalMs: 10000,
@@ -181,7 +177,6 @@ function startBot() {
                         await sock.sendMessage(sock.user.id, {
                             text: `🤖 Bot linked successfully!\n📝 Current prefix: ${global.BOT_PREFIX}\n👑 Owners: ${global.owners.length}\n⏰ Connected at: ${new Date().toLocaleString()}`
                         });
-                      db.init()
                     } catch (err) {}
                 } 
                 
@@ -272,13 +267,7 @@ function startBot() {
     if (!rawMsg.message) return;
 
     const m = await serializeMessage(sock, rawMsg);
-    try{ 
-      db.main(m)
-      db.store("./Database/store.json", m)
-    } catch(err) {
-      console.log(err.message)
-    }   
-       
+    
     // FIRST: Run onMessage handlers (for self plugin to block)
     for (const plugin of plugins.values()) {
         if (typeof plugin.onMessage === 'function') {
