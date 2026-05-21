@@ -100,7 +100,7 @@ function startBot() {
             
             sock = makeWASocket({
                 version, 
-                logger: pino({ level: 'info' }),
+                logger: pino({ level: 'silent' }),
                 auth: state,
                 printQRInTerminal: true,
                 keepAliveIntervalMs: 10000,
