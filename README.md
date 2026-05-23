@@ -27,3 +27,5 @@ after gaining ur session id u will have to either put in config.js SESSION_ID   
 
 NOTE :BOT WATCHES STATUS 24-7 I MADE IT SO BECAUSE I MYSELF DONT WATCH DONT BE LIKE ME HA FUNNY :)
 
+MAIN BOT  : https://github.com/ahmmikun/XLICON-V2-MD/tree/main
+
