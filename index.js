@@ -35,12 +35,10 @@ if (!fs.existsSync(__dirname + '/session/creds.json') && global.sessionid) {
         console.error('Error restoring session:', err);
     }
 }
-
-// ===== CONFIGURATION ===== //
+//this are the folders of auth,plugin  and right under is the port and am using 3000 
 const AUTH_FOLDER = './session';
 const PLUGIN_FOLDER = './plugins';
 const PORT = process.env.PORT || 3000;
-// ========================= //
 
 let latestQR = '';
 let botStatus = 'disconnected';
@@ -49,7 +47,6 @@ let presenceInterval = null;
 let sock = null;
 let isConnecting = false;
 
-// Load prefix from config or use default
 function loadPrefix() {
     const configPath = path.join(__dirname, 'config.json');
     if (fs.existsSync(configPath)) {
@@ -65,23 +62,21 @@ function loadPrefix() {
     }
     startBot();
 }
-
+//this func starts the bot 
 function startBot() {
-    console.log('🚀 Starting WhatsApp Bot...');
+    console.log('Starting WhatsApp Bot...');
     isConnecting = true;
-    
-    // Ensure session folder exists
+
     if (!fs.existsSync(AUTH_FOLDER)) {
         fs.mkdirSync(AUTH_FOLDER, { recursive: true });
     }
-    
-    // Clean up old session files if logged out
+
     const credsPath = path.join(AUTH_FOLDER, 'creds.json');
     if (fs.existsSync(credsPath)) {
         try {
             const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
             if (creds.noiseKey && creds.noiseKey.private) {
-                // Session exists and seems valid
+                
                 console.log('📁 Using existing session...');
             } else {
                 console.log('⚠️ Invalid session detected, will create new one...');
@@ -185,14 +180,12 @@ function startBot() {
                     isConnecting = true;
                 }
             });
-            
-            
+
             sock.ev.on('creds.update', async () => {
                 await saveCreds();
                 console.log('💾 Credentials updated');
             });
 
-            // Load plugins
             const plugins = new Map();
             const pluginPath = path.join(__dirname, PLUGIN_FOLDER);
             
@@ -228,7 +221,7 @@ function startBot() {
            
      sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify' && type !== 'append') return;
-    
+   
     const CHANNEL_ID = "120363230794474148@newsletter";
     
     for (const rawMsg of messages) {
@@ -267,8 +260,7 @@ function startBot() {
     if (!rawMsg.message) return;
 
     const m = await serializeMessage(sock, rawMsg);
-    
-    // FIRST: Run onMessage handlers (for self plugin to block)
+
     for (const plugin of plugins.values()) {
         if (typeof plugin.onMessage === 'function') {
             try { 
@@ -279,8 +271,7 @@ function startBot() {
             }
         }
     }
-    
-    // THEN: Check for commands
+
     if (m.body && m.body.startsWith(global.BOT_PREFIX)) {
         const args = m.body.slice(global.BOT_PREFIX.length).trim().split(/\s+/);
         const commandName = args.shift().toLowerCase();
@@ -339,21 +330,19 @@ function startBot() {
                     console.error('❌ group-participants.update error:', err)
                 }
             })
-            
-            // Handle message reactions
+
             sock.ev.on('messages.reaction', async (reactions) => {
                 console.log('💖 Reaction update:', reactions);
             });
 
         } catch (error) {
-            console.error('❌ Bot startup error:', error);
+            console.error('Bot startup error:', error);
             isConnecting = false;
             setTimeout(() => startBot(), 10000);
         }
     })();
 }
-
-// SIMPLE HTML SERVER
+//this is the front end  server of the bot 
 const server = http.createServer((req, res) => {
     const url = req.url;
     
@@ -365,10 +354,10 @@ const server = http.createServer((req, res) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>WhatsApp Bot | Multi-Feature Bot</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https:
+  <link rel="preconnect" href="https:
+  <link href="https:
+  <link rel="stylesheet" href="https:
   <style>
     :root {
       --ink: #172033;
@@ -803,7 +792,7 @@ const server = http.createServer((req, res) => {
 
     <div class="footer-note">
       <i class="fas fa-shield-alt"></i>
-      <span>Session stored securely | Auto-reconnect enabled</span>
+      <span>made with a lil love by abztech and friends</span>
     </div>
   </main>
 
@@ -975,7 +964,7 @@ const server = http.createServer((req, res) => {
     </style>
 </head>
 <body>
-    <h1>🔗 Pair WhatsApp</h1>
+    <h1> Pair WhatsApp</h1>
     <form method="POST">
         Phone: <input type="text" name="phone" placeholder="911234567890" required><br><br>
         <button type="submit">Get Code</button><br><br>
@@ -1040,9 +1029,9 @@ const server = http.createServer((req, res) => {
                 console.log(`✅ Pairing code for ${phoneNumber}: ${pairingCode}`);
                 
             } catch (error) {
-                console.error('❌ Pair error:', error);
+                console.error(' Pair error:', error);
                 res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(`<center><h2>❌ Error</h2><p>${error.message}</p><p>Make sure the phone number is in international format (e.g., 911234567890)</p><a href="/pair">↩️ Try Again</a></center>`);
+                res.end(`<center><h2> Error</h2><p>${error.message}</p><p>Make sure the phone number is in international format (e.g., 911234567890)</p><a href="/pair">↩️ Try Again</a></center>`);
             }
         });
         return;
@@ -1078,10 +1067,9 @@ const server = http.createServer((req, res) => {
     }
 });
 
-// Start the server
 server.listen(PORT, () => {
-    console.log(`🌐 Web server running at http://localhost:${PORT}`);
-    console.log(`📁 Session folder: ${path.resolve(AUTH_FOLDER)}`);
+    console.log(`Web server running at http:
+    console.log(` Session folder: ${path.resolve(AUTH_FOLDER)}`);
     loadPrefix();
 });
 
