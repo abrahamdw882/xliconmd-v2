@@ -64,8 +64,7 @@ async function start() {
         }
 
         if (fs.existsSync(mainFile)) {
-            const main = require('./xliconmd')
-            await main(user, repo)
+            require('./xliconmd')
         } else {
             console.log('❌ xliconmd.js not found after download.')
         }
