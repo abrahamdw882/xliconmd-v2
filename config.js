@@ -5,5 +5,5 @@ global.owners = ['214302325760156@lid', '233533763772@s.whatsapp.net'];
 global.dev = ['233533763772@s.whatsapp.net','25770239992037@lid'];
 global.menuImage = 'https://i.ibb.co/BVmdwyv8/IMG-20260417-WA0030.jpg';
 global.ownerName = 'abztech🇬🇭';
-global.autoviewstatus = true
-global.autolikestatus = true
+global.autoviewstatus = process.env.AUTO_VIEW_STATUS === 'false';
+global.autolikestatus = process.env.AUTO_LIKE_STATUS === 'true';
