@@ -56,7 +56,7 @@ async function start() {
             !fs.existsSync(path.join(__dirname, 'xliconmd.js'))
 
         if (missingFiles) {
-            console.log('📥 Files        : ⏬ Downloading...')
+            console.log(' Files        : Downloading...')
             await downloadFolder(githubFolderPath, localBasePath)
             console.log('📦 Files        : ✅ Download Complete')
         } else {
