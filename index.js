@@ -7,116 +7,69 @@ const repo = 'xlicon-v'
 const branch = 'main'
 const githubFolderPath = 'xliconmd-db'
 
-const localBasePath = __dirname
+const localBasePath = path.join(__dirname)
 const mainFile = path.join(__dirname, 'xliconmd.js')
 
 async function downloadFolder(folderPath, localPath) {
-    const url =
-`https://api.github.com/repos/${user}/${repo}/contents/${folderPath}?ref=${branch}`
+    const url = `https://api.github.com/repos/${user}/${repo}/contents/${folderPath}?ref=${branch}`
 
-    const { data } = await axios.get(url, {
-        headers: {
-            'User-Agent': 'axios'
-        }
-    })
+    try {
+        const { data } = await axios.get(url, {
+            headers: { 'User-Agent': 'axios' }
+        })
 
-    for (const item of data) {
-
-        const localFilePath = path.join(
-            localPath,
-            item.path.replace(
-                githubFolderPath + '/',
-                ''
-            )
-        )
-
-        if (item.type === 'dir') {
-
-            fs.mkdirSync(
-                localFilePath,
-                { recursive: true }
+        for (const item of data) {
+            const localFilePath = path.join(
+                localPath,
+                item.path.replace(githubFolderPath + '/', '')
             )
 
-            await downloadFolder(
-                item.path,
-                localPath
-            )
+            if (item.type === 'file') {
+                if (fs.existsSync(localFilePath)) continue
 
-        } else {
+                fs.mkdirSync(path.dirname(localFilePath), { recursive: true })
 
-            fs.mkdirSync(
-                path.dirname(localFilePath),
-                { recursive: true }
-            )
-
-            console.log(`⬇ Downloading ${item.path}`)
-
-            const file = await axios.get(
-                item.download_url,
-                {
+                const { data: fileData } = await axios.get(item.download_url, {
                     responseType: 'text'
+                })
+
+                fs.writeFileSync(localFilePath, fileData, 'utf8')
+            } else if (item.type === 'dir') {
+                if (!fs.existsSync(localFilePath)) {
+                    fs.mkdirSync(localFilePath, { recursive: true })
                 }
-            )
 
-            fs.writeFileSync(
-                localFilePath,
-                file.data,
-                'utf8'
-            )
-
-            console.log(`✅ Saved ${localFilePath}`)
+                await downloadFolder(item.path, localPath)
+            }
         }
+    } catch (err) {
+        console.error(`❌ Error reading folder ${folderPath}:`, err.message)
     }
 }
 
 async function start() {
-
     try {
+        const missingFiles =
+            !fs.existsSync(path.join(__dirname, 'lib')) ||
+            !fs.existsSync(path.join(__dirname, 'plugins')) ||
+            !fs.existsSync(path.join(__dirname, 'handler.js')) ||
+            !fs.existsSync(path.join(__dirname, 'xliconmd.js'))
 
-        const missing =
-            !fs.existsSync('./plugins') ||
-            !fs.existsSync('./lib') ||
-            !fs.existsSync('./handler.js') ||
-            !fs.existsSync('./xliconmd.js')
-
-        if (missing) {
-
-            console.log(
-                '📦 Missing files detected. Downloading...'
-            )
-
-            await downloadFolder(
-                githubFolderPath,
-                localBasePath
-            )
-
-            console.log('✅ Download finished')
-
+        if (missingFiles) {
+            console.log('📥 Files        : ⏬ Downloading...')
+            await downloadFolder(githubFolderPath, localBasePath)
+            console.log('📦 Files        : ✅ Download Complete')
+        } else {
+            console.log('🛡️ Files        : 🔁 Already exist — skipping download.')
         }
 
-        console.log({
-            plugins: fs.existsSync('./plugins'),
-            lib: fs.existsSync('./lib'),
-            handler: fs.existsSync('./handler.js'),
-            main: fs.existsSync('./xliconmd.js')
-        })
-
-        if (!fs.existsSync(mainFile)) {
-            throw new Error(
-                'xliconmd.js missing after download'
-            )
+        if (fs.existsSync(mainFile)) {
+            require('./xliconmd')
+        } else {
+            console.log('❌ xliconmd.js not found after download.')
         }
-
-        require('./xliconmd')
-
     } catch (err) {
-
-        console.error(
-            'Startup failed:',
-            err
-        )
-
-        process.exit(1)
+        console.error('❌ Error in start XLICON-MD ():', err.message)
     }
 }
 
